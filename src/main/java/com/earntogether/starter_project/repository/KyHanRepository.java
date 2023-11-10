@@ -1,13 +1,11 @@
 package com.earntogether.starter_project.repository;
 
-import com.earntogether.starter_project.entity.Customer;
+import com.earntogether.starter_project.entity.KyHan;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerRepository extends MongoRepository<Customer,
-        String> {
-    Customer findByMakh(int makh);
-    void deleteByMakh(int makh);
+public interface KyHanRepository extends MongoRepository<KyHan, String> {
+
 }

@@ -1,25 +1,24 @@
 package com.earntogether.starter_project.controller;
 
-import com.earntogether.starter_project.entity.SoTietKiem;
-import com.earntogether.starter_project.service.SoTietKiemService;
+import com.earntogether.starter_project.entity.PhieuGoiTien;
+import com.earntogether.starter_project.service.PhieuGoiTienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+@RequestMapping("api/goitien")
 @RestController
-@RequestMapping("api/sotk")
-public class SoTietKiemController {
+public class PhieuGoiTienController {
     @Autowired
-    private SoTietKiemService soTkService;
+    private PhieuGoiTienService goiTienService;
+
     @GetMapping
-    public ResponseEntity<List<SoTietKiem>> getAllSoTietKiem(){
-        return new ResponseEntity<>(soTkService.getAllSotk(),
+    public ResponseEntity<List<PhieuGoiTien>> getAllPhieuGoiTien(){
+        return new ResponseEntity<>(goiTienService.getAllPhieuGoiTien(),
                 HttpStatus.OK);
     }
 }
