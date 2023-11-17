@@ -13,4 +13,6 @@ public interface KyHanRepository extends MongoRepository<KyHan, String> {
     Optional<KyHan> findByMonth(int month);
 
     Optional<KyHan> findByName(String name);
+
+    void deleteByType(int type);
 }

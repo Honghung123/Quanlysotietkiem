@@ -66,8 +66,8 @@
     </form>
     <p class="mt-4 text-danger fw-bold d-inline-block">Xóa khách hàng có makh chỉ định: </p>
     <label for="">Nhập makh: </label>
-    <input type="number" id="delete-makh" required min="1">
-    <button class="btn btn-danger" id="delete-btn">Delete</button>
+    <input type="number" id="delete-makhInput" required min="1">
+    <button class="btn btn-danger" id="delete-makhBtn">Delete</button>
     <hr><br>
 
     <h1>Gửi tiền</h1>
@@ -191,8 +191,7 @@
         <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Thêm
-                        kỳ hạn</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Thêm mới kỳ hạn</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -207,7 +206,7 @@
                         <input type="number" min="0.0001" step="0.0001" value="0.0055" name="laisuat">
                         <br>
                         <label for="">Thời gian gởi tối thiểu(đơn vị: ngày) :</label>
-                        <input type="number" name="ngayDcGui" min="1" value="10">
+                        <input type="number" name="minDate" min="1" value="10">
                         <br>
                         <label for="">Số tiền gửi tối thiểu: </label>
                         <input type="number" name="min_deposit" step="10000" min="10000" value="100000">
@@ -217,10 +216,29 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
+    <br>
+    <p class="mt-4 text-danger fw-bold d-inline-block">Xóa kỳ hạn có type chỉ định: </p>
+    <label for="">Nhập loại: </label>
+    <input type="number" id="delete-kyhanInput" required min="1">
+    <button class="btn btn-danger" id="delete-kyhanBtn">Delete</button>
+    <hr><br>
+    <h1>Cập nhật kỳ hạn: </h1>
+    <form action="http://localhost:8080/api/kyhan" method="PUT" id="update-kyhan">
+        <input type="number" name="type" value="3" hidden>
+        <label for="">Số tiền gửi tối thiểu: </label>
+        <input type="number" name="min_deposit" step="10000" min="10000" value="100000">
+        <br>
+        <label for="">Thời gian gởi tối thiểu(đơn vị: ngày) :</label>
+        <input type="number" name="minDay" min="1" value="10">
+        <br>
+        <label for="">Lãi suất: </label>
+        <input type="number" min="0.0001" step="0.0001" value="0.0055" name="laisuat">
+        <br>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
     <hr><br>
     <div style="height: 70vh;"></div>
 </div>
@@ -248,30 +266,50 @@
         $rangess.on("input change", function (e) {
             $showRangess.text(e.target.value);
         })
-
-        // DELETE Customer by makh
-        $("#delete-btn").click(function () {
-            // Send an Ajax request to delete the customer with id 4
-            const makh = parseInt($("#delete-makh").val()) | 0;
-            const isConfirmed = confirm(`Are you sure you want to delete customer has makh: ${makh}`);
-            if (isConfirmed && makh != 0) {
+        function deleteAjaxRequest(url, id) {
+            const isConfirmed = confirm(`Are you sure you want to delete id: ${id}`);
+            if (isConfirmed && id != 0) {
                 $.ajax({
                     type: "DELETE",
-                    url: `http://localhost:8080/api/customer/${makh}`,
+                    url: `${url}/${id}`,
                     success: function (data) {
-                        alert("Delete successful! makh " + makh);
+                        alert("Delete successful! id " + id);
                     },
                     error: function (e) {
-                        alert("Error deleting customer has makh " + makh + " lets check list customer to see")
+                        alert("Error deleting object has id " + id + " lets check list object to see")
                     }
                 });
-            } else if (isConfirm && makh == 0) {
-                alert("Mã khách hàng makh must not be empty");
+            } else if (isConfirm && id == 0) {
+                alert("Field must not be empty");
             }
+        }
+        // DELETE Customer by makh
+        $("#delete-makhBtn").click(function () {
+            const makh = parseInt($("#delete-makhInput").val()) | 0;
+            const url = "http://localhost:8080/api/customer";
+            deleteAjaxRequest(url, makh);
+        });
+        // DELETE Ky han by type
+        $("#delete-kyhanBtn").click(function () {
+            const id = parseInt($("#delete-kyhanInput").val()) | 0;
+            const url = "http://localhost:8080/api/kyhan";
+            deleteAjaxRequest(url, id);
+        });
+        // Update kyhan by type
+        $("#update-kyhan").submit(function (e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var form = $(this);
+            var actionUrl = form.attr('action');
+            $.ajax({
+                type: "PUT",
+                url: actionUrl,
+                data: form.serialize(), // serializes the form's elements.
+                success: function (data, code) {
+                    alert("Update thanh cong!" + code); // show response from the php script.
+                }
+            });
 
         });
-
-        const $regulations = $("form.regulations");
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

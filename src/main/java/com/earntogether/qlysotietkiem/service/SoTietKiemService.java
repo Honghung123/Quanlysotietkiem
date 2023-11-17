@@ -44,8 +44,9 @@ public class SoTietKiemService {
         return tietKiemRepository.findAll();
     }
 
-    public List<Long> getAllPassbookInDay(LocalDate date){
-        var listSotkByDate = tietKiemRepository.findByDateCreated(date);
+    public List<Long> getAllPassbookInDay(int type, LocalDate date){
+        var listSotkByDate =
+                tietKiemRepository.findByTypeAndDateCreated(type, date);
         long numOfOpened = listSotkByDate.stream()
                         .filter(soTk ->soTk.getStatus() == 1).count();
         long numOfClosed = listSotkByDate.stream()
@@ -116,7 +117,7 @@ public class SoTietKiemService {
             String dayStr = day < 10? "-0"+day : "-"+day;
             LocalDate date = LocalDate.parse(monthYear + dayStr);
             // Query database lấy số mở và đóng
-            var numOpenClose = getAllPassbookInDay(date);
+            var numOpenClose = getAllPassbookInDay(type, date);
             long numOfOpened = numOpenClose.get(0);
             long numOfClosed = numOpenClose.get(1);
             if(numOfOpened > 0 || numOfClosed > 0){

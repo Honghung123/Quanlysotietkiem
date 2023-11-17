@@ -14,5 +14,5 @@ public interface SoTietKiemRepository extends MongoRepository<SoTietKiem,
 
     Optional<SoTietKiem> findByMaso(int maso);
 
-    List<SoTietKiem> findByDateCreated(LocalDate date);
+    List<SoTietKiem> findByTypeAndDateCreated(int type, LocalDate date);
 }

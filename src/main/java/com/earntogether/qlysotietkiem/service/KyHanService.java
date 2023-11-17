@@ -1,8 +1,10 @@
 package com.earntogether.qlysotietkiem.service;
 
 import com.earntogether.qlysotietkiem.dto.KyHanDTO;
+import com.earntogether.qlysotietkiem.dto.KyHanUpdateDTO;
 import com.earntogether.qlysotietkiem.entity.KyHan;
 import com.earntogether.qlysotietkiem.exception.DataNotValidException;
+import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.repository.KyHanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,10 @@ public class KyHanService {
         kyHanRepository.save(kyHan);
     }
 
+    public void deleteByType(int type){
+        kyHanRepository.deleteByType(type);
+    }
+
     private KyHan convertFromDTO(KyHanDTO kyHanDto) {
         int ngayDcRut = 15; // Áp dụng cho quy định 1
         var duocGuiThem = BigInteger.valueOf(0);// Chỉ áp dụng cho không kỳ hạn
@@ -48,5 +54,27 @@ public class KyHanService {
                 .ngayDcRut(ngayDcRut)
                 .duocGuiThem(BigInteger.valueOf(0))
                 .build();
+    }
+
+    public KyHan getKyHanByType(int type) {
+        return kyHanRepository.findByType(type).get();
+    }
+
+    public void updateKyHan(KyHanUpdateDTO kyHanUpdateDto) {
+        int type = kyHanUpdateDto.type();
+        var kyHanOpt = kyHanRepository.findByType(type);
+        if(kyHanOpt.isPresent()){
+            var kyhan = kyHanOpt.get();
+            kyhan.setMinDeposit(kyHanUpdateDto.min_deposit());
+//            if(type == 0){
+//                kyhan.setMinDateSent(kyHanUpdateDto.minDay());
+//            }
+            kyhan.setLaisuat(kyHanUpdateDto.laisuat());
+            kyHanRepository.save(kyhan);
+            System.out.println(kyhan);
+        }else{
+            throw new ResourceNotFoundException(404, "Không tìm thấy kỳ hạn " +
+                    "có type = " + type);
+        }
     }
 }
