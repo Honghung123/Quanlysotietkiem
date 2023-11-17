@@ -1,10 +1,11 @@
 ### Nếu chưa biết làm gì thì đọc hướng dẫn  https://www.notion.so/honghung123/MongoDB-041f51a666cc4aafb7a2f5b94e036419?pvs=4
 
-## Trước khi clone project, Nếu Ai muốn thao tác database riêng thì thực hiện dưới đây, không thì gửi email để t add vào
-- Trong thư mục Resources/static, ae copy index.html chạy trên Node js hoặc 
-chạy bằng localhost:8080 cx đc hoặc tạo copy một file html rồi mở file html bằng liveserver của vscode cx được luôn
+## Trước khi clone project, Nếu Ai muốn thao tác database riêng thì thực hiện dưới đây, không thì gửi email đã đăng kí mongoDB để tui invite 
+- NOTE: Trong thư mục Resources/static, ae copy index.html chạy trên Node js 
+  hoặc chạy bằng localhost:8080 cx đc hoặc tạo copy một file html rồi mở 
+  file html bằng live server của vscode cx được luôn
 
-# Tạo database riêng
+# Tạo database riêng(cho ai muốn thao tác database riêng)
 - Tạo collection "tbl_kyhan" rồi nhấn INSERT DOCUMENT rồi lần lượt thêm 3 
   cái này
 
@@ -38,7 +39,7 @@ chạy bằng localhost:8080 cx đc hoặc tạo copy một file html rồi mở
 
 {"_id":{"$oid":"6555939c966b486c1a667eaa"},"makh":{"$numberInt":"1"},"maso":{"$numberInt":"1"},"type":{"$numberInt":"1"},"date":{"$date":{"$numberLong":"1699635600000"}},"money":"100000","_class":"com.earntogether.starter_project.entity.PhieuRutTien"}
 
-
+* Note: Tạo xong thì nhớ copy Connection String của mình rồi paste vào .env nhe 
 
 
 
