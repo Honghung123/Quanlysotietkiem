@@ -20,5 +20,5 @@ public class Customer {
     private String name;
     private String address;
     private String cmnd;
-    private SoTietKiem sotk;
+    private Passbook sotk;
 }

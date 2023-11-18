@@ -6,6 +6,7 @@ import com.earntogether.qlysotietkiem.entity.KyHan;
 import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.repository.KyHanRepository;
+import com.earntogether.qlysotietkiem.utils.converter.KyHanConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,52 +30,41 @@ public class KyHanService {
             throw new DataNotValidException(400,
                     "Đã tồn tại kỳ hạn có tên: " + kyHanDto.name());
         }
-        KyHan kyHan = convertFromDTO(kyHanDto);
-        System.out.println(kyHan);
-        kyHanRepository.save(kyHan);
+        int type = this.generateNewType();
+        KyHan newKyhan = KyHanConverter.convertDTOtoEntity(kyHanDto, type);
+        System.out.println(newKyhan);
+        kyHanRepository.save(newKyhan);
+    }
+
+    private int generateNewType() {
+        int type = 1;
+        while(kyHanRepository.findByType(type).isPresent()){
+            type++;
+        }
+        return type;
     }
 
     public void deleteByType(int type){
         kyHanRepository.deleteByType(type);
     }
 
-    private KyHan convertFromDTO(KyHanDTO kyHanDto) {
-        int ngayDcRut = 15; // Áp dụng cho quy định 1
-        var duocGuiThem = BigInteger.valueOf(0);// Chỉ áp dụng cho không kỳ hạn
-        int type = 1;
-        while(kyHanRepository.findByType(type).isPresent()){
-            type++;
-        }
-        return KyHan.builder()
-                .type(type)
-                .name(kyHanDto.name())
-                .month(kyHanDto.month())
-                .laisuat(kyHanDto.laisuat())
-                .minDeposit(kyHanDto.min_deposit())
-                .ngayDcRut(ngayDcRut)
-                .duocGuiThem(BigInteger.valueOf(0))
-                .build();
-    }
-
     public KyHan getKyHanByType(int type) {
-        return kyHanRepository.findByType(type).get();
+        return kyHanRepository.findByType(type).orElseThrow(
+                () -> new ResourceNotFoundException(404, "Không tồn tại kỳ " +
+                        "hạn có type = " + type));
     }
 
     public void updateKyHan(KyHanUpdateDTO kyHanUpdateDto) {
         int type = kyHanUpdateDto.type();
-        var kyHanOpt = kyHanRepository.findByType(type);
-        if(kyHanOpt.isPresent()){
-            var kyhan = kyHanOpt.get();
-            kyhan.setMinDeposit(kyHanUpdateDto.min_deposit());
-//            if(type == 0){
-//                kyhan.setMinDateSent(kyHanUpdateDto.minDay());
-//            }
-            kyhan.setLaisuat(kyHanUpdateDto.laisuat());
-            kyHanRepository.save(kyhan);
-            System.out.println(kyhan);
-        }else{
-            throw new ResourceNotFoundException(404, "Không tìm thấy kỳ hạn " +
-                    "có type = " + type);
-        }
+        var kyhan = kyHanRepository.findByType(type).orElseThrow(
+                () -> new ResourceNotFoundException(404, "Không tìm thấy kỳ " +
+                        "hạn có type = " + type));
+        kyhan.setMinDeposit(kyHanUpdateDto.min_deposit());
+//      if(type == 0){
+//           kyhan.setMinDateSent(kyHanUpdateDto.minDay());
+//      }
+        kyhan.setLaisuat(kyHanUpdateDto.laisuat());
+        kyHanRepository.save(kyhan);
+        System.out.println(kyhan);
     }
 }

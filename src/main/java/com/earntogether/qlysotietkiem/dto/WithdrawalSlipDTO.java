@@ -13,13 +13,13 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoiTienDTO {
+public class WithdrawalSlipDTO {
     @Min(value= 1, message = "Mã số khách hàng không hợp lệ")
     private int maso;
     @NotEmpty(message = "Thiếu tên khách hàng")
     private String name;
-    @NotNull(message = "Ngày gửi tiền không hợp lệ")
-    private LocalDate dateSent;
-    @Min(value = 0, message = "Số tiền gửi không hợp lệ")
+    @NotNull(message = "Ngày rút tiền không hợp lệ")
+    private LocalDate dateTakeOut;
+    @Min(value = 0, message = "Số tiền rút không hợp lệ")
     private BigInteger money;
 }

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.time.LocalDate;
 
-public record SoTietKiemDTO(
+public record CustomerPassbookDTO(
         @NotNull int makh,
         @NotEmpty(message = "Tên khách hàng trống") String name,
         @NotEmpty(message = "Địa chỉ không trống") String address,

@@ -16,7 +16,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @Builder
 @Document(collection = "tbl_kyhan")
-public class    KyHan {
+public class KyHan {
     @MongoId(FieldType.OBJECT_ID)
     private String id;
     private int type;

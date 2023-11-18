@@ -1,8 +1,8 @@
 package com.earntogether.qlysotietkiem.dto;
 
-import lombok.Builder;
+import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.time.YearMonth;
 
-public record ReportDTO(int type, String monthYear) {
+public record ReportDTO(int type, @NotNull YearMonth monthYear) {
 }

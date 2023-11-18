@@ -5,6 +5,7 @@ import com.earntogether.qlysotietkiem.dto.KyHanUpdateDTO;
 import com.earntogether.qlysotietkiem.entity.KyHan;
 import com.earntogether.qlysotietkiem.service.KyHanService;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("api/kyhan")
 @CrossOrigin(origins = "*")
+@AllArgsConstructor
 public class KyHanController {
-    @Autowired
-    private KyHanService kyHanService;
+    private final KyHanService kyHanService;
 
     @GetMapping
     public ResponseEntity<List<KyHan>> getAllKyHan(){

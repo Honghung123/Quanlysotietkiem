@@ -2,7 +2,7 @@
 
 ## Trước khi clone project, Nếu Ai muốn thao tác database riêng thì thực hiện dưới đây, không thì gửi email đã đăng kí mongoDB để tui invite 
 - NOTE: Trong thư mục Resources/static, ae copy index.html chạy trên Node js 
-  hoặc chạy bằng localhost:8080 cx đc hoặc tạo copy một file html rồi mở 
+  hoặc chạy IDE rồi mở localhost:8080 cx đc hoặc tạo copy một file html rồi mở 
   file html bằng live server của vscode cx được luôn
 
 # Tạo database riêng(cho ai muốn thao tác database riêng)
@@ -25,7 +25,7 @@
 
 - Tạo collection "tbl_sotietkiem" rồi nhấn INSERT DOCUMENT rồi thêm cái này
 
-{"_id":{"$oid":"655724a4ecb4265e841ae01d"},"maso":{"$numberInt":"1"},"status":{"$numberInt":"1"},"type":{"$numberInt":"0"},"dateCreated":{"$date":{"$numberLong":"1698858000000"}},"money":"600000","kyHan":{"_id":{"$oid":"654d9fbaf1aded54971329da"},"type":{"$numberInt":"0"},"name":"Không kỳ hạn","month":{"$numberInt":"0"},"laisuat":{"$numberDouble":"0.0015"},"dcguithem":"100000","ngaydcrut":{"$numberInt":"15"},"min_deposit":"100000"},"_class":"com.earntogether.qlysotietkiem.entity.SoTietKiem"}
+{"_id":{"$oid":"655724a4ecb4265e841ae01d"},"maso":{"$numberInt":"1"},"status":{"$numberInt":"1"},"type":{"$numberInt":"0"},"dateCreated":{"$date":{"$numberLong":"1698858000000"}},"money":"600000","kyHan":{"_id":{"$oid":"654d9fbaf1aded54971329da"},"type":{"$numberInt":"0"},"name":"Không kỳ hạn","month":{"$numberInt":"0"},"laisuat":{"$numberDouble":"0.0015"},"dcguithem":"100000","ngaydcrut":{"$numberInt":"15"},"min_deposit":"100000"},"_class":"com.earntogether.qlysotietkiem.entity.Passbook"}
 
 
 
@@ -39,7 +39,11 @@
 
 {"_id":{"$oid":"6555939c966b486c1a667eaa"},"makh":{"$numberInt":"1"},"maso":{"$numberInt":"1"},"type":{"$numberInt":"1"},"date":{"$date":{"$numberLong":"1699635600000"}},"money":"100000","_class":"com.earntogether.starter_project.entity.PhieuRutTien"}
 
-* Note: Tạo xong thì nhớ copy Connection String của mình rồi paste vào .env nhe 
+* Note: Tạo xong thì nhớ copy ConnectionString của bạn đã copy lúc tạo rồi 
+  paste 
+  vào .
+  env 
+  nhe 
 
 
 

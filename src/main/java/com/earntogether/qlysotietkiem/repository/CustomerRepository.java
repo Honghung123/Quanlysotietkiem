@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface CustomerRepository extends MongoRepository<Customer,
         String> {
     Optional<Customer> findByMakh(int makh);
-    void deleteByMakh(int makh);
+    Optional<Customer> deleteByMakh(int makh);
     long count();
 
 //    Optional<Customer> findBySotk_Maso(int maso);

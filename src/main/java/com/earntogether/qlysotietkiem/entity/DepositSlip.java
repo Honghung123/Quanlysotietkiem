@@ -1,6 +1,7 @@
 package com.earntogether.qlysotietkiem.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,14 +14,14 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "tbl_sotietkiem")
-public class SoTietKiem {
+@Builder
+@Document(collection = "tbl_phieugoitien")
+public class DepositSlip {
     @MongoId(FieldType.OBJECT_ID)
     private String id;
+    private int makh;
     private int maso;
-    private int status;
     private int type;
-    private LocalDate dateCreated;
+    private LocalDate date;
     private BigInteger money;
-    private KyHan kyHan;
 }
