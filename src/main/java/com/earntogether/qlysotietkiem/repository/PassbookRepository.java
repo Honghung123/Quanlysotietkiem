@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface PassbookRepository extends MongoRepository<Passbook,
         String> {
 
-    Optional<Passbook> findByMaso(int maso);
+    Optional<Passbook> findByPassbookCode(int passbookCode);
 
-    List<Passbook> findByTypeAndDateCreated(int type, LocalDate date);
+    List<Passbook> findByTypeAndDateCreated(int type, LocalDate dateCreated);
 }

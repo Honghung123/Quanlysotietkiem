@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 
 @Builder
-public record DepositSlipModel(String id, int makh, int maso,
-                               int type, LocalDate date, BigInteger money) {
-}
+public record DepositSlipModel(String id, int customerCode, int passbookCode,
+                               int type, LocalDate depositDate,
+                               BigInteger money
+) {}

@@ -9,12 +9,10 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends MongoRepository<Customer,
         String> {
-    Optional<Customer> findByMakh(int makh);
-    Optional<Customer> deleteByMakh(int makh);
+    Optional<Customer> findByCustomerCode(int customerCode);
+    Optional<Customer> findByIdentityNumber(String identityNumber);
+    Optional<Customer> deleteByCustomerCode(int customerCode);
     long count();
-
-//    Optional<Customer> findBySotk_Maso(int maso);
-    Optional<Customer> findByNameAndSotkMaso(String name, int maso);
-
-    String findNameByMakh(int makh);
+    Optional<Customer> findByNameAndPassbookPassbookCode(String name,
+                                                         int passbookCode);
 }

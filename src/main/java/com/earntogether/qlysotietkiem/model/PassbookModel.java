@@ -6,4 +6,6 @@ import lombok.Data;
 
 import java.math.BigInteger;
 
-public record PassbookModel(int maso, int type, String name, BigInteger money){}
+public record PassbookModel(int passbookCode, int type, String customerName,
+                            BigInteger money
+){}

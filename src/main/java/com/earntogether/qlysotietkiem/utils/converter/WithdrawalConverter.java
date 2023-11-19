@@ -4,27 +4,29 @@ import com.earntogether.qlysotietkiem.dto.WithdrawalSlipDTO;
 import com.earntogether.qlysotietkiem.entity.Customer;
 import com.earntogether.qlysotietkiem.entity.WithdrawalSlip;
 import com.earntogether.qlysotietkiem.model.DepositSlipModel;
+import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
+
 public class WithdrawalConverter {
 
-    public static DepositSlipModel convertEntityToModel(WithdrawalSlip rutTien){
-        return DepositSlipModel.builder()
-                .id(rutTien.getId())
-                .makh(rutTien.getMakh())
-                .maso(rutTien.getMaso())
-                .type(rutTien.getType())
-                .date(rutTien.getDate())
-                .money(rutTien.getMoney())
+    public static WithdrawalSlipModel convertEntityToModel(WithdrawalSlip withdrawalSlip){
+        return WithdrawalSlipModel.builder()
+                .id(withdrawalSlip.getId())
+                .customerCode(withdrawalSlip.getCustomerCode())
+                .passbookCode(withdrawalSlip.getPassbookCode())
+                .type(withdrawalSlip.getType())
+                .withdrawalDate(withdrawalSlip.getWithdrawalDate())
+                .money(withdrawalSlip.getMoney())
                 .build();
     }
 
     public static WithdrawalSlip convertDTOtoEntity(WithdrawalSlipDTO withdrawalSlipDto,
                                                     Customer customer){
         return WithdrawalSlip.builder()
-                .maso(withdrawalSlipDto.getMaso())
-                .makh(customer.getMakh())
-                .type(customer.getSotk().getType())
-                .date(withdrawalSlipDto.getDateTakeOut())
-                .money(withdrawalSlipDto.getMoney())
+                .customerCode(customer.getCustomerCode())
+                .passbookCode(customer.getPassbook().getPassbookCode())
+                .type(customer.getPassbook().getType())
+                .withdrawalDate(withdrawalSlipDto.withdrawalDate())
+                .money(withdrawalSlipDto.money())
                 .build();
     }
 }

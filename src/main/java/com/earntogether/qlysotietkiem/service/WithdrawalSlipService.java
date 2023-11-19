@@ -4,6 +4,7 @@ import com.earntogether.qlysotietkiem.dto.WithdrawalSlipDTO;
 import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.model.DepositSlipModel;
+import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
 import com.earntogether.qlysotietkiem.repository.WithdrawalSlipRepository;
 import com.earntogether.qlysotietkiem.utils.converter.WithdrawalConverter;
 import lombok.AllArgsConstructor;
@@ -17,24 +18,24 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class WithdrawalSlipService {
-    private WithdrawalSlipRepository rutTienRepository;
+    private WithdrawalSlipRepository depositSlipRepository;
     private CommonCustomerPassbookService commonCusPassbookService;
-    public List<DepositSlipModel> getAllPhieuRutTien(){
-        return rutTienRepository.findAll().stream()
+    public List<WithdrawalSlipModel> getAllWithdrawalSlip(){
+        return depositSlipRepository.findAll().stream()
                 .map(WithdrawalConverter::convertEntityToModel).toList();
     }
 
-    public String insert(WithdrawalSlipDTO withdrawalSlipDto) {
-        var customer = commonCusPassbookService.getCustomerByNameAndMaso(
-                withdrawalSlipDto.getName(), withdrawalSlipDto.getMaso()).orElseThrow(
-                () -> new ResourceNotFoundException( 404,
-                        "Không tồn tại khách hàng: " + withdrawalSlipDto.getName() +
-                                " có mã sổ: " + withdrawalSlipDto.getMaso()));
-        var passbook = customer.getSotk();
+    public String insertWithdrawalSlip(WithdrawalSlipDTO withdrawalSlipDto) {
+        var customer = commonCusPassbookService.getCustomersByNameAndPassbookCode(
+                withdrawalSlipDto.customerName(), withdrawalSlipDto.passbookCode())
+                .orElseThrow(() -> new ResourceNotFoundException( 404,
+                        "Không tồn tại khách hàng: " + withdrawalSlipDto.customerName()
+                                + " có mã sổ: " + withdrawalSlipDto.passbookCode()));
+        var passbook = customer.getPassbook();
         var kyhan = passbook.getKyHan();
         // Kiểm tra thời gian mở sổ có đủ điều kiện được rút
         var currentDate = LocalDate.now();
-        if(withdrawalSlipDto.getDateTakeOut().isAfter(currentDate)){
+        if(withdrawalSlipDto.withdrawalDate().isAfter(currentDate)){
             throw new DataNotValidException(400, "Ngày rút không được " +
                         "vượt quá ngày hiện tại");
         }
@@ -50,39 +51,40 @@ public class WithdrawalSlipService {
             // Kiểm tra xem đã gửi ít nhất 1 tháng chưa
 
             // Kiểm tra xem số tiền rút với số dư hiện có
-            if(withdrawalSlipDto.getMoney().compareTo(passbook.getMoney()) > 0){
+            if(withdrawalSlipDto.money().compareTo(passbook.getMoney()) > 0){
                 throw new DataNotValidException(400, "Số dư trong tài " +
                             "khoản không đủ để rút");
             }
         }else{
             // Kiểm tra xem sổ đã quá kì hạn chưa
             boolean isOverDue = ChronoUnit.DAYS.between(dateOpened,
-                        currentDate) >= kyhan.getMonth();
+                        currentDate) >= kyhan.getNumOfMonths();
             if(!isOverDue){
                 throw new DataNotValidException(400, "Sổ vẫn chưa đáo " +
                             "hạn, không thể rút");
             }
             // Kiểm tra xem có rút hêt toàn bộ không
-            if(withdrawalSlipDto.getMoney().compareTo(passbook.getMoney()) < 0){
+            if(withdrawalSlipDto.money().compareTo(passbook.getMoney()) < 0){
                 throw new DataNotValidException(400, "Phải rút hết toàn " +
                             "bộ số dư");
-            }else if(withdrawalSlipDto.getMoney().compareTo(passbook.getMoney()) > 0) {
+            }else if(withdrawalSlipDto.money().compareTo(passbook.getMoney()) > 0) {
                 throw new DataNotValidException(400, "Số tiền rút đã vượt" +
                             " quá số dư");
             }
         }
 
-        var moneyLeft = passbook.getMoney().subtract(withdrawalSlipDto.getMoney());
-        commonCusPassbookService.updateMoneyByMakh(customer.getMakh(), moneyLeft);
+        var moneyLeft = passbook.getMoney().subtract(withdrawalSlipDto.money());
+        commonCusPassbookService.updateMoneyByCustomerCode(customer.getCustomerCode(), moneyLeft);
         String message = "Rut thanh cong!!";
         // Nếu rút hết tiền thì đóng sổ - đóng luôn Customer :V
         if(moneyLeft.equals(BigInteger.valueOf(0))) {
-            commonCusPassbookService.deleteCustomerByMakh(customer.getMakh());
+            commonCusPassbookService.deleteCustomerByCustomerCode(customer.getCustomerCode());
             message = "Rut thanh cong!! Da dong so tiet kiem";
         }
-        var rutTien = WithdrawalConverter.convertDTOtoEntity(withdrawalSlipDto, customer);
-        rutTienRepository.save(rutTien);
-        System.out.println(rutTien);
+        var depositSlip = WithdrawalConverter.convertDTOtoEntity(
+                withdrawalSlipDto, customer);
+        depositSlipRepository.save(depositSlip);
+        System.out.println("-> Inserted " + depositSlip);
         return message;
     }
 }

@@ -30,19 +30,17 @@ import java.util.*;
 @AllArgsConstructor
 public class CustomerService {
     private CustomerRepository customerRepository;
-    private CommonCustomerPassbookService commonCusPassbookService;
     private PassbookService passbookService;
     private KyHanRepository kyhanRepository;
-    private MongoTemplate mongoTemplate;
 
     public List<Customer> getAllCustomer(){
         return customerRepository.findAll();
     }
 
-    public Customer getCustomersByMakh(int makh){
-        var customer = customerRepository.findByMakh(makh).orElseThrow(
+    public Customer getCustomerByCustomerCode(int code){
+        var customer = customerRepository.findByCustomerCode(code).orElseThrow(
                 () -> new ResourceNotFoundException(404, "Khong ton tai" +
-                " khach hang co ma khach hang: " + makh));
+                " khach hang co ma khach hang: " + code));
         return customer;
     }
 
@@ -57,6 +55,11 @@ public class CustomerService {
             throw new DataNotValidException(400, "Số tiền gửi không được nhỏ " +
                     "hơn số tiền tối thiểu là " + kyhan.getMinDeposit());
         }
+        // Check if identity number is exist
+        if(customerRepository.findByIdentityNumber(cusPassbookDto.identityNumber()).isPresent()){
+            throw new DataNotValidException(400, "Đã tồn tại khách hàng có " +
+                    "Chứng minh nhân dân: " + cusPassbookDto.identityNumber());
+        }
         // Check if the opened date's passbook is over than present
         if(cusPassbookDto.dateOpened().isAfter(LocalDate.now())){
             throw new DataNotValidException(400, "Ngày mở sổ không được vượt" +
@@ -65,69 +68,59 @@ public class CustomerService {
 
         Customer customer = CustomerConverter.covertDTOtoEntity(cusPassbookDto);
         // Tạo makh cho Customer đăng kí mới
-        customer.setMakh(getNewMakh());
+        customer.setCustomerCode(getNewCustomerCode());
         // Tạo Mã sổ tiet kiem
-        int maSotk = passbookService.getNewMaSo();
-        var passbook = new Passbook(null, maSotk,1, cusPassbookDto.type(),
-                cusPassbookDto.dateOpened(), cusPassbookDto.money(), kyhan);
-        customer.setSotk(passbook);
-        System.out.println(customer);
-
+        int newPassbookCode = passbookService.getNewPassbookCode();
+        var passbook = new Passbook(null, newPassbookCode,1,
+                cusPassbookDto.type(), cusPassbookDto.dateOpened(),
+                cusPassbookDto.money(), kyhan);
+        customer.setPassbook(passbook);
         customerRepository.save(customer);
-        passbookService.insert(passbook);
+        passbookService.insertPassbook(passbook);
+        System.out.println("-> Inserted " + customer);
     }
 
-    private int getNewMakh() {
-        int newMakh = 1;
-        while(customerRepository.findByMakh(newMakh).isPresent()){
-            newMakh++;
+    private int getNewCustomerCode() {
+        int newCode = 1;
+        while(customerRepository.findByCustomerCode(newCode).isPresent()){
+            newCode++;
         }
-        return newMakh;
+        return newCode;
     }
 
-    public void updateCustomer(Customer customer){
-        Query query = new Query();
-        query.addCriteria(Criteria.where("makh").is(customer.getMakh()));
-        Update update = new Update();
-        update.set("name", customer.getName());
-        update.set("address", customer.getAddress());
-        update.set("cmnd", customer.getCmnd());
-        mongoTemplate.updateFirst(query,update,Customer.class);
-        System.out.println("Updated customer id: " + customer.getMakh());
-    }
-
-    public void deleteSotkbyMakh(int makh) {
-        var customer = customerRepository.findByMakh(makh).orElseThrow(
+    public void deletePassbookByCustomerCode(int code) {
+        var customer = customerRepository.findByCustomerCode(code).orElseThrow(
                 () -> new ResourceNotFoundException(404, "Không tìm thấy " +
-                        "khách hàng có mã: " + makh));
-        passbookService.updateStatus(customer.getSotk().getMaso(), 0);
-        customer.setSotk(null);
+                        "khách hàng có mã: " + code));
+        int passbookCode = customer.getPassbook().getPassbookCode();
+        passbookService.updateStatus(passbookCode ,0);
+        customer.setPassbook(null);
         customerRepository.save(customer);
     }
-    public List<PassbookModel> traCuuSoTietKiem() {
+    public List<PassbookModel> lookupPassbooks() {
         List<Customer> customers = this.getAllCustomer();
         return customers.stream()
-                .filter(customer -> customer.getSotk()!=null)
+                .filter(customer -> customer.getPassbook()!=null)
                 .map(PassBookConverter::convertEntityToModel)
                 .toList();
     }
 
-    public Map<String, Object> traCuuSoTietKiem(int page, int per_page,
+    public Map<String, Object> lookupPassbooks(int page, int per_page,
                                                 String sortBy) {
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(page, per_page, sort);
         Page<Customer> customerPages = this.getAllWithPagination(pageable);
         var customerList = customerPages.getContent();
         List<PassbookModel> soTkList = customerList.stream()
-                .filter(customer -> customer.getSotk() != null)
+                .filter(customer -> customer.getPassbook() != null)
                 .map(PassBookConverter::convertEntityToModel)
                 .toList();
-        Map<String, Object> cusSoTkMap = new LinkedHashMap<>();
-        cusSoTkMap.put("data", soTkList);
-        cusSoTkMap.put("total_pages", customerPages.getTotalPages());
-        cusSoTkMap.put("total_element", customerPages.getTotalElements());
-        cusSoTkMap.put("page", customerPages.getNumber());
-        return cusSoTkMap;
+        Map<String, Object> cusPassbookMap = new LinkedHashMap<>();
+        cusPassbookMap.put("data", soTkList);
+        cusPassbookMap.put("total_pages", customerPages.getTotalPages());
+        cusPassbookMap.put("total_element", customerPages.getTotalElements());
+        cusPassbookMap.put("page", customerPages.getNumber());
+        return cusPassbookMap;
     }
 
     public Page<Customer> getAllWithPagination(Pageable pageable) {

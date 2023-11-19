@@ -7,13 +7,6 @@ import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-//    @ExceptionHandler({ ResourceNotFoundException.class })  // Có thể bắt nhiều
-//    // loại exception
-//    public ResponseEntity<String> handleResourcesNotFoundException(Exception e) {
-//        return ResponseEntity.status(404).body(e.getMessage());
-//    }
-
-    // Có thêm các @ExceptionHandler khác...
     @ExceptionHandler({ ResourceNotFoundException.class,
             DataNotValidException.class })
     public ResponseEntity<String> handleCommonException(CommonException e,

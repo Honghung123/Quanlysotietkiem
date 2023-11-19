@@ -33,9 +33,9 @@ class StarterProjectApplicationTests {
 
     @Test
     void testCustomerService(){
-        var nameKh = customerRepository.findNameByMakh(4);
+        var nameKh = customerRepository.findByCustomerCode(4);
         System.out.println(nameKh);
-        var kh = customerRepository.findByMakh(4);
+        var kh = customerRepository.findByCustomerCode(4);
         System.out.println(kh);
     }
 }

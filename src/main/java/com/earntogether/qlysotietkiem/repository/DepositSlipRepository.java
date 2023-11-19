@@ -11,8 +11,7 @@ import java.util.List;
 @Repository
 public interface DepositSlipRepository extends MongoRepository<DepositSlip,
         String> {
-//    @Query(value = "{'type':?0, 'date': ?1}")
-    @Query(value = "{'type':?0, 'date': ?1}")
-    List<DepositSlip> findByTypeAndDate(int type, LocalDate date);
+    @Query(value = "{'type':?0, 'depositDate': ?1}")
+    List<DepositSlip> findByTypeAndDepositDate(int type, LocalDate depositDate);
 
 }

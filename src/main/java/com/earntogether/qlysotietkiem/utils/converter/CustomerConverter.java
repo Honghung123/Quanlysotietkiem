@@ -6,10 +6,10 @@ import com.earntogether.qlysotietkiem.entity.Customer;
 public class CustomerConverter {
     public static Customer covertDTOtoEntity(CustomerPassbookDTO cusPassbookDto){
         return Customer.builder()
-                .makh(cusPassbookDto.makh())
+                .customerCode(cusPassbookDto.customerCode())
                 .name(cusPassbookDto.name())
                 .address(cusPassbookDto.address())
-                .cmnd(cusPassbookDto.cmnd())
+                .identityNumber(cusPassbookDto.identityNumber())
                 .build();
     }
 }

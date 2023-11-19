@@ -20,7 +20,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
-    private final CommonCustomerPassbookService commonCustomerPassbookService;
+    private final CommonCustomerPassbookService commonCusPassbookService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -28,39 +28,39 @@ public class CustomerController {
         return customerService.getAllCustomer();
     }
 
-    @GetMapping("/{makh}")
+    @GetMapping("/{code}")
     @ResponseStatus(HttpStatus.OK)
-    public Customer getCustomerByMakh(@PathVariable int makh){
-        return customerService.getCustomersByMakh(makh) ;
+    public Customer getCustomerByCustomerCode(@PathVariable int code){
+        return customerService.getCustomerByCustomerCode(code) ;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String insertCustomer(@Valid CustomerPassbookDTO soTkDto){
-        customerService.insertCustomerPassbook(soTkDto);
+    public String insertCustomer(@Valid CustomerPassbookDTO cusPassbookDto){
+        customerService.insertCustomerPassbook(cusPassbookDto);
         String message = "Created successfully";
         return String.format("{\"message\": \"%s\"}", message);
     }
 
-    @DeleteMapping("/{makh}")
-    public void deleteCustomerByMakh(@PathVariable int makh){
-        commonCustomerPassbookService.deleteCustomerByMakh(makh);
+    @DeleteMapping("/{code}")
+    public void deleteCustomerByCustomerCode(@PathVariable int code){
+        commonCusPassbookService.deleteCustomerByCustomerCode(code);
     }
 
     @GetMapping("/tracuu")
     @ResponseStatus(HttpStatus.OK)
-    public List<PassbookModel> traCuuSoTietKiem(){
-        return customerService.traCuuSoTietKiem();
+    public List<PassbookModel> lookupPassbooks(){
+        return customerService.lookupPassbooks();
     }
 
     @GetMapping("/lookup")
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> traCuuSoTietKiem(
+    public Map<String, Object> lookupPassbooks(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "per_page", defaultValue = "2") int per_page,
             @RequestParam(name = "sortBy", defaultValue = "makh") String sortBy
     ){
-        return customerService.traCuuSoTietKiem(page, per_page, sortBy);
+        return customerService.lookupPassbooks(page, per_page, sortBy);
     }
 
 }

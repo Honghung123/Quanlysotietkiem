@@ -26,9 +26,9 @@ public class PassbookController {
     }
 
     @GetMapping("/report")
-    public List<ReportModel> getOpenClosePassbookReportByMonth(
+    public List<ReportModel> getOpenClosePassbookMonthlyReport(
             @Valid ReportDTO reportDto){
-        return passbookService.getOpenClosePassbookReportByMonth(reportDto);
+        return passbookService.getOpenClosePassbookMonthlyReport(reportDto);
     }
 
     @GetMapping("/daily-turnover")

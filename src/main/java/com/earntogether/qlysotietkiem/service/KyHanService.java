@@ -21,10 +21,10 @@ public class KyHanService {
         return kyHanRepository.findAll();
     }
 
-    public void addNewKyHan(KyHanDTO kyHanDto) {
-        if(kyHanRepository.findByMonth(kyHanDto.month()).isPresent()){
+    public void insertKyHan(KyHanDTO kyHanDto) {
+        if(kyHanRepository.findByNumOfMonths(kyHanDto.numOfMonths()).isPresent()){
             throw new DataNotValidException(400,
-                    "Đã tồn tại kỳ hạn có " + kyHanDto.month() + " tháng");
+                    "Đã tồn tại kỳ hạn có " + kyHanDto.numOfMonths() + " tháng");
         }
         if(kyHanRepository.findByName(kyHanDto.name()).isPresent()){
             throw new DataNotValidException(400,
@@ -32,20 +32,21 @@ public class KyHanService {
         }
         int type = this.generateNewType();
         KyHan newKyhan = KyHanConverter.convertDTOtoEntity(kyHanDto, type);
-        System.out.println(newKyhan);
         kyHanRepository.save(newKyhan);
+        System.out.println("-> Inserted " + newKyhan);
     }
 
     private int generateNewType() {
-        int type = 1;
-        while(kyHanRepository.findByType(type).isPresent()){
-            type++;
+        int newType = 1;
+        while(kyHanRepository.findByType(newType).isPresent()){
+            newType++;
         }
-        return type;
+        return newType;
     }
 
     public void deleteByType(int type){
         kyHanRepository.deleteByType(type);
+        System.out.println("Deleted ky han co type = " + type);
     }
 
     public KyHan getKyHanByType(int type) {
@@ -59,12 +60,12 @@ public class KyHanService {
         var kyhan = kyHanRepository.findByType(type).orElseThrow(
                 () -> new ResourceNotFoundException(404, "Không tìm thấy kỳ " +
                         "hạn có type = " + type));
-        kyhan.setMinDeposit(kyHanUpdateDto.min_deposit());
+        kyhan.setMinDeposit(kyHanUpdateDto.minDeposit());
 //      if(type == 0){
 //           kyhan.setMinDateSent(kyHanUpdateDto.minDay());
 //      }
-        kyhan.setLaisuat(kyHanUpdateDto.laisuat());
+        kyhan.setInterestRate(kyHanUpdateDto.interestRate());
         kyHanRepository.save(kyhan);
-        System.out.println(kyhan);
+        System.out.println("-> Updated " + kyhan);
     }
 }

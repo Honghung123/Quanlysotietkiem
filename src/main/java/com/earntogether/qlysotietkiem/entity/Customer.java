@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -16,9 +17,14 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 public class Customer {
     @MongoId(FieldType.OBJECT_ID)
     private String id;
-    private int makh;
+    @Field(name = "customerCode")
+    private int customerCode;
+    @Field(name = "customerName")
     private String name;
+    @Field(name = "address")
     private String address;
-    private String cmnd;
-    private Passbook sotk;
+    @Field(name = "identityNumber")
+    private String identityNumber;
+    @Field(name = "passbook")
+    private Passbook passbook;
 }

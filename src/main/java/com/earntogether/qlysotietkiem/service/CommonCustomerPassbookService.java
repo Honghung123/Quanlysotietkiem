@@ -8,6 +8,7 @@ import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.repository.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,68 +30,69 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CommonCustomerPassbookService {
     private CustomerRepository customerRepository;
-    private DepositSlipRepository goiTienRepository;
-    private WithdrawalSlipRepository rutTienRepository;
+    private DepositSlipRepository depositSlipRepository;
+    private WithdrawalSlipRepository withdrawalSlipRepository;
     private KyHanRepository kyhanRepository;
     private PassbookRepository passbookRepository;
 
     // CustomerService
-    public void deleteCustomerByMakh(int makh){
-        var deletedCustomer = customerRepository.deleteByMakh(makh).orElseThrow(
+    public void deleteCustomerByCustomerCode(int code){
+        var deletedCustomer = customerRepository.deleteByCustomerCode(code).orElseThrow(
                 () -> new DataNotValidException(400, "Không tồn tại khách " +
-                        "hàng có makh : " + makh));
-        updateStatus(deletedCustomer.getSotk().getMaso(), 0);
+                        "hàng có makh : " + code));
+        updateStatus(deletedCustomer.getPassbook().getPassbookCode(), 0);
+        System.out.println("-> Deleted " + deletedCustomer);
     }
 
-    public Optional<Customer> getCustomerByNameAndMaso(String name, int maso){
-        return customerRepository.findByNameAndSotkMaso(name,maso);
+    public Optional<Customer> getCustomersByNameAndPassbookCode(String name,
+                                                                int code){
+        return customerRepository.findByNameAndPassbookPassbookCode(name, code);
     }
 
-    public void updateMoneyByMakh( int makh, @NotNull BigInteger money){
-        var customer = customerRepository.findByMakh(makh).orElseThrow(
+    public void updateMoneyByCustomerCode( @Positive int code,
+                                           @NotNull BigInteger money){
+        var customer = customerRepository.findByCustomerCode(code).orElseThrow(
                 () -> new ResourceNotFoundException(404, "Không tồn tại khách " +
-                        "hàng có mã: " + makh));
-        var soTk = customer.getSotk();
-        soTk.setMoney(money);
-        customer.setSotk(soTk);
+                        "hàng có mã: " + code));
+        var passbook = customer.getPassbook();
+        passbook.setMoney(money);
+        customer.setPassbook(passbook);
         System.out.println(customer);
         customerRepository.save(customer);
     }
-    public String getNameByMakh(int makh) {
-        var customer = customerRepository.findByMakh(makh).orElseThrow(
+    public String getNameByCustomerCode(int code) {
+        var customer = customerRepository.findByCustomerCode(code).orElseThrow(
                 () -> new ResourceNotFoundException(404, "Không tìm thấy " +
-                        "khách hàng có mã: " + makh));
+                        "khách hàng có mã: " + code));
         return customer.getName();
     }
 
     // PassbookService
-    public void updateStatus(int maso, int status){
-        Passbook tietKiem = passbookRepository.findByMaso(maso).orElseThrow(
-                () -> new ResourceNotFoundException(404,
-                        "Không tìm thấy sổ tiết kiệm có maso " + maso));
-        tietKiem.setStatus(status);
-        passbookRepository.save(tietKiem);
+    public void updateStatus(int code, int status){
+        Passbook passbook = passbookRepository.findByPassbookCode(code)
+                .orElseThrow(() -> new ResourceNotFoundException(404,
+                        "Không tìm thấy sổ tiết kiệm có mã = " + code));
+        passbook.setStatus(status);
+        passbookRepository.save(passbook);
     }
 
-    // PhieuGoiTien Service
+    // DepositSlip Service
     public BigInteger getSumDepositMoney(int type, @NotNull LocalDate date) {
-        List<DepositSlip> listDepositSlip = goiTienRepository
-                .findByTypeAndDate(type, date);
+        List<DepositSlip> listDepositSlip = depositSlipRepository
+                .findByTypeAndDepositDate(type, date);
         var sumMoney = listDepositSlip.stream()
                 .map(DepositSlip::getMoney)
                 .reduce(BigInteger.valueOf(0), BigInteger::add);
-        System.out.println("Sum of deposited money: " + sumMoney);
         return sumMoney;
     }
 
-    // PhieuRutTien Service
-    public BigInteger getSumTakenOutMoney(int type, @NotNull LocalDate date) {
-        List<WithdrawalSlip> listWithdrawalSlip = rutTienRepository
-                .findByTypeAndDate(type, date);
-        BigInteger sumMoney = listWithdrawalSlip.stream()
+    // WithdrawalSlip Service
+    public BigInteger getSumWithdrawalMoney(int type, @NotNull LocalDate date) {
+        List<WithdrawalSlip> listWithdrawalSlip = withdrawalSlipRepository
+                .findByTypeAndWithdrawalDate(type, date);
+        var sumMoney = listWithdrawalSlip.stream()
                 .map(WithdrawalSlip::getMoney)
                 .reduce(BigInteger.valueOf(0), BigInteger::add);
-        System.out.println("Sum moneys: " + sumMoney);
         return sumMoney;
     }
 }

@@ -1,6 +1,7 @@
 package com.earntogether.qlysotietkiem.controller;
 
 import com.earntogether.qlysotietkiem.dto.DepositSlipDTO;
+import com.earntogether.qlysotietkiem.model.DepositSlipModel;
 import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
 import com.earntogether.qlysotietkiem.service.DepositSlipService;
 import jakarta.validation.Valid;
@@ -16,17 +17,17 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class DepositSlipController {
-    private final DepositSlipService goiTienService;
+    private final DepositSlipService depositService;
 
     @GetMapping
-    public ResponseEntity<List<WithdrawalSlipModel>> getAllPhieuGoiTien(){
-        return ResponseEntity.ok(goiTienService.getAllPhieuGoiTien());
+    public ResponseEntity<List<DepositSlipModel>> getAllDepositSlip(){
+        return ResponseEntity.ok(depositService.getAllDepositSlip());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public String insert(@Valid DepositSlipDTO depositSlipDto){
-        goiTienService.insert(depositSlipDto);
+    public String insertDepositSlip(@Valid DepositSlipDTO depositSlipDto){
+        depositService.insertDepositSlip(depositSlipDto);
         return "{\"message\" : \"Gởi tiền thành công!\"}";
     }
 }

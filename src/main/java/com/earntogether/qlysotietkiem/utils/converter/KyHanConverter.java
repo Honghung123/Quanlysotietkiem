@@ -12,9 +12,9 @@ public class KyHanConverter {
         return KyHan.builder()
                 .type(type)
                 .name(kyHanDto.name())
-                .month(kyHanDto.month())
-                .laisuat(kyHanDto.laisuat())
-                .minDeposit(kyHanDto.min_deposit())
+                .numOfMonths(kyHanDto.numOfMonths())
+                .interestRate(kyHanDto.interestRate())
+                .minDeposit(kyHanDto.minDeposit())
                 .ngayDcRut(ngayDcRut)
                 .duocGuiThem(BigInteger.valueOf(0))
                 .build();

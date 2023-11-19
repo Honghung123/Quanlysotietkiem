@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -17,10 +18,16 @@ import java.time.LocalDate;
 public class Passbook {
     @MongoId(FieldType.OBJECT_ID)
     private String id;
-    private int maso;
+    @Field(name = "passbookCode")
+    private int passbookCode;
+    @Field(name = "status")
     private int status;
+    @Field(name = "type")
     private int type;
+    @Field(name = "dateCreated")
     private LocalDate dateCreated;
+    @Field(name = "money")
     private BigInteger money;
+    @Field(name = "kyHan")
     private KyHan kyHan;
 }

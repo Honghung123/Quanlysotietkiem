@@ -4,6 +4,7 @@ import com.earntogether.qlysotietkiem.dto.KyHanDTO;
 import com.earntogether.qlysotietkiem.dto.KyHanUpdateDTO;
 import com.earntogether.qlysotietkiem.entity.KyHan;
 import com.earntogether.qlysotietkiem.service.KyHanService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,14 @@ public class KyHanController {
     }
 
     @PostMapping
-    public String addNewKyHan(@NotNull KyHanDTO kyHanDto){
-        kyHanService.addNewKyHan(kyHanDto);
+    public String insertKyHan(@Valid KyHanDTO kyHanDto){
+        kyHanService.insertKyHan(kyHanDto);
         return "{\"message\": \"Them thanh cong\"}";
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public String updateKyHan(@NotNull KyHanUpdateDTO kyHanUpdateDto){
+    public String updateKyHan(@Valid KyHanUpdateDTO kyHanUpdateDto){
         kyHanService.updateKyHan(kyHanUpdateDto);
         return "{\"message\": \"Cap nhat thanh cong\"}";
     }

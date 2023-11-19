@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface WithdrawalSlipRepository extends MongoRepository<WithdrawalSlip,
         String> {
-    @Query("{'type' : ?0, 'date': ?1}")
-    List<WithdrawalSlip> findByTypeAndDate(int type, LocalDate date);
+    @Query("{'type' : ?0, 'withdrawalDate': ?1}")
+    List<WithdrawalSlip> findByTypeAndWithdrawalDate(int type, LocalDate withdrawalDate);
 }

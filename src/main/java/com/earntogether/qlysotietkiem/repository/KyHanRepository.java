@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface KyHanRepository extends MongoRepository<KyHan, String> {
     Optional<KyHan> findByType(int type);
 
-    Optional<KyHan> findByMonth(int month);
+    Optional<KyHan> findByNumOfMonths(int numOfMonths);
 
     Optional<KyHan> findByName(String name);
 

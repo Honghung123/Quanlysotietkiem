@@ -19,14 +19,18 @@ import java.math.BigInteger;
 public class KyHan {
     @MongoId(FieldType.OBJECT_ID)
     private String id;
+    @Field(name = "type")
     private int type;
+    @Field(name = "name")
     private String name;
-    private int month;
-    private Double laisuat;
+    @Field(name = "numOfMonths")
+    private int numOfMonths;
+    @Field(name = "interestRate")
+    private Double interestRate;
     @Field("dcguithem")
     private BigInteger duocGuiThem;
     @Field(name = "ngaydcrut")
     private int ngayDcRut;
-    @Field(name = "min_deposit")
+    @Field(name = "minDeposit")
     private BigInteger minDeposit;
 }

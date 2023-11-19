@@ -8,6 +8,7 @@ import com.earntogether.qlysotietkiem.model.ReportModel;
 import com.earntogether.qlysotietkiem.repository.KyHanRepository;
 import com.earntogether.qlysotietkiem.repository.PassbookRepository;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,39 +25,39 @@ public class PassbookService {
         return passbookRepository.findAll();
     }
 
-    public int getNewMaSo() {
+    public int getNewPassbookCode() {
         int newMaso = 1;
-        while(passbookRepository.findByMaso(newMaso).isPresent()){
+        while(passbookRepository.findByPassbookCode(newMaso).isPresent()){
             newMaso++;
         }
         return newMaso;
     }
 
-    public void insert(Passbook passbook) {
+    public void insertPassbook(Passbook passbook) {
         passbookRepository.save(passbook);
     }
 
     public void updateStatus(int maso, int status){
-        Passbook tietKiem = passbookRepository.findByMaso(maso).orElseThrow(
-                () -> new ResourceNotFoundException(404,
-                        "Không tìm thấy sổ tiết kiệm có maso " + maso));
+        Passbook tietKiem = passbookRepository.findByPassbookCode(maso)
+                .orElseThrow(() -> new ResourceNotFoundException(404,
+                        "Không tìm thấy sổ tiết kiệm có mã " + maso));
         tietKiem.setStatus(status);
         passbookRepository.save(tietKiem);
     }
 
-    public List<Integer> countOpenClosePassbook(int type, LocalDate date){
-        var listSotkByDate =
+    public List<Integer> countOpenClosePassbook(int type,@NonNull LocalDate date){
+        var listPassbookByDate =
                 passbookRepository.findByTypeAndDateCreated(type, date);
         int numOfOpened = 0;
         int numOfClosed = 0;
-        for(var soTk: listSotkByDate){
-            if(soTk.getStatus() == 1) numOfOpened ++;
-            else if(soTk.getStatus() == 0) numOfClosed++;
+        for(var passbook: listPassbookByDate){
+            if(passbook.getStatus() == 1) numOfOpened ++;
+            else if(passbook.getStatus() == 0) numOfClosed++;
         };
         return new LinkedList<>(Arrays.asList(numOfOpened, numOfClosed));
     }
 
-    public List<ReportModel> getOpenClosePassbookReportByMonth(ReportDTO reportDto) {
+    public List<ReportModel> getOpenClosePassbookMonthlyReport(ReportDTO reportDto) {
         // Lấy số ngày trong tháng năm chỉ định
         int totalDays = reportDto.monthYear().lengthOfMonth();
         int type = reportDto.type();
@@ -86,12 +87,11 @@ public class PassbookService {
             int type = kyhan.getType();
             var sumOfMoneyDeposit =
                     commonCustomerPassbookService.getSumDepositMoney(type, date);
-            var sumOfExpenseMoney =
-                    commonCustomerPassbookService.getSumTakenOutMoney(type, date);
+            var sumOfWithdrawalMoney = commonCustomerPassbookService
+                                        .getSumWithdrawalMoney(type, date);
             revenueList.add(new AccountingModel(kyhan.getName(), type,
-                    sumOfMoneyDeposit, sumOfExpenseMoney));
+                    sumOfMoneyDeposit, sumOfWithdrawalMoney));
         });
-        System.out.println(revenueList);
         return revenueList;
     }
 }
