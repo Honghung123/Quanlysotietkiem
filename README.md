@@ -1,14 +1,14 @@
 ### Nếu chưa biết làm gì thì đọc hướng dẫn  https://www.notion.so/honghung123/MongoDB-041f51a666cc4aafb7a2f5b94e036419?pvs=4
 
-## Trước khi clone project, Nếu Ai muốn thao tác database riêng thì thực hiện dưới đây, không thì gửi email đã đăng kí mongoDB để tui invite 
-- NOTE: Trong thư mục Resources/static, ae copy index.html chạy trên Node js 
-  hoặc chạy project trên IDE rồi mở localhost:8080 cx đc hoặc tạo copy một file 
-  html rồi mở file html bằng live server của vscode cx được luôn
+- NOTE: AE run project rồi test api trong http://localhost:8080 . Nếu muốn 
+  test trên Node js thì copy index.html trong thư mục Resources/static,hoặc tạo
+một file html rồi mở file html bằng live server của vscode cx được luôn
 
-# NEW UPDATE - Giờ đây không cần làm gì nhiều 
-- Tạo collection "tbl_customer_passbook", "tbl_depositSlip", 
-  "tbl_withdrawalSlip" và "tbl_passbook" (Không cần chứa dữ liệu) 
-- Tạo collection "tbl_kyhan" rồi nhấn INSERT DOCUMENT rồi lần lượt thêm 3 
+## Trước khi clone project, Nếu Ai muốn thao tác database riêng thì thực hiện dưới đây, không thì gửi email đã đăng kí mongoDB để tui invite 
+# 🎉 NEW UPDATE - Giờ đây không cần làm gì nhiều 
+- Tạo collection ***tbl_customer_passbook***, ***tbl_depositSlip***, 
+  ***tbl_withdrawalSlip*** và ***tbl_passbook*** (Không cần chứa dữ liệu) 
+- Tạo collection ***tbl_kyhan*** rồi nhấn INSERT DOCUMENT rồi lần lượt thêm 3 
   cái này (Thực ra không thêm cũng được, nhưng muốn đăng ký sổ tiết kiệm thì 
   bắt buộc phải có kỳ hạn)
 
