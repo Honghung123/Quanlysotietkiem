@@ -37,12 +37,12 @@
 <body>
 <div class="container pt-4">
     <h1>Đăng kí sổ tiết kiệm</h1>
-    <a href="http://localhost:8080/api/customer" class="showLink btn bg-pink" target="_blank">
+    <a href="http://localhost:8080/api/customer-passbook" class="showLink btn bg-pink" target="_blank">
         Xem danh sách sổ Tiết kiệm</a>
-    <form action="http://localhost:8080/api/customer" method="POST">
+    <form action="http://localhost:8080/api/customer-passbook" method="POST">
         <legend>POST method</legend>
         <label for="">Mã số:</label>
-        <input type="text" name="makh" required>
+        <input type="text" name="customerCode" required>
         <label for="name">Khách hàng: </label>
         <input type="text" name="name" required>
         <label for="maso">Địa chỉ:</label>
@@ -59,7 +59,7 @@
             <option value="1">6 tháng</option>
         </select>
         <label for="">CMND</label>
-        <input type="text" name="cmnd" required>
+        <input type="text" name="identityNumber" required>
         <label for="">Ngày mở sổ: </label>
         <input type="date" name="dateOpened" required>
         <button type="submit" class="btn btn-primary">Đăng kí</button>
@@ -71,17 +71,17 @@
     <hr><br>
 
     <h1>Gửi tiền</h1>
-    <a href="http://localhost:8080/api/goitien" class="showLink btn bg-pink" target="_blank">
+    <a href="http://localhost:8080/api/deposit" class="showLink btn bg-pink" target="_blank">
         Xem danh sách gửi tiền</a>
-    <form action="http://localhost:8080/api/goitien" method="POST">
+    <form action="http://localhost:8080/api/deposit" method="POST">
         <legend>POST method</legend>
         <label for="name">Khách hàng: </label>
-        <input type="text" name="name" required>
+        <input type="text" name="customerName" required>
         <label for="maso">Mã sổ:</label>
-        <input type="text" name="maso" required>
+        <input type="text" name="passbookCode" required>
         <br>
         <label for="takeout">Ngày gởi</label>
-        <input type="date" name="dateSent" required>
+        <input type="date" name="depositDate" required>
         <label for="money">Số tiền gửi</label>
         <input type="range" name="money" min="10000" max="2000000" step="10000" id="moneys" value="50000">
         <span class="show-ranges"></span>
@@ -90,17 +90,17 @@
     <br>
     <hr>
     <h1>Rút tiền</h1>
-    <a href="http://localhost:8080/api/ruttien" class="showLink btn bg-pink" target="_blank">
+    <a href="http://localhost:8080/api/withdraw" class="showLink btn bg-pink" target="_blank">
         Xem danh sách rút tiền</a>
-    <form action="http://localhost:8080/api/ruttien" method="POST">
+    <form action="http://localhost:8080/api/withdraw" method="POST">
         <legend>POST method</legend>
         <label for="name">Khách hàng: </label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="customerName" required>
         <label for="maso">Mã sổ:</label>
-        <input type="text" name="maso" id="maso" required>
+        <input type="text" name="passbookCode" id="maso" required>
         <br>
         <label for="takeout">Ngày rút</label>
-        <input type="date" name="dateTakeOut" id="takeout" required>
+        <input type="date" name="withdrawalDate" id="takeout" required>
         <label for="money">Số tiền rút</label>
         <input type="range" name="money" id="money" min="10000" max="2000000" step="10000" value="50000">
         <span class="show-range"></span>
@@ -109,23 +109,23 @@
     <br>
     <hr>
     <h1>Danh sách sổ tiết kiệm</h1>
-    <a href="http://localhost:8080/api/tracuu" class="showLink btn bg-pink">Hiển thị</a>
-    <a href="http://localhost:8080/api/tracuus?page=0&per_page=3" class="showLink btn bg-pink">
+    <a href="http://localhost:8080/api/customer-passbook/tracuu" class="showLink btn bg-pink">Hiển thị</a>
+    <a href="http://localhost:8080/api/customer-passbook/lookup?page=0&per_page=3" class="showLink btn bg-pink">
         Hiển thị có phân trang</a>
     <p>* page là trang hiện tại bắt đầu từ 0(mặc định là 0), per_page là số item trong mỗi page(mặc định là 2),
         total_pages là số page</p>
     <hr><br>
-    <h1>Danh thu hoạt động ngày:</h1>
-    <form action="http://localhost:8080/api/doanhthuDaily" method="POST">
-        <legend>POST method</legend>
+    <h1>Danh số hoạt động ngày:</h1>
+    <form action="http://localhost:8080/api/passbook/daily-turnover" method="GET">
+        <legend>GET method</legend>
         <label for="">Chọn ngày: </label>
         <input type="date" name="date" required>
         <button type="submit" class="btn btn-info">Tra cứu</button>
     </form>
     <hr><br>
     <h1>Báo Cáo Mở/Đóng Sổ Tháng</h1>
-    <form action="http://localhost:8080/api/report" method="GET">
-        <legend>POST method</legend>
+    <form action="http://localhost:8080/api/passbook/report" method="GET">
+        <legend>GET method</legend>
         <label for="name">Loại tiết kiệm: </label>
         <select name="type" id="" required>
             <option value="0">Không kỳ hạn</option>
@@ -152,7 +152,7 @@
             <td>
                 <a href="#" class="btn btn-info">Edit</a>
             </td>
-            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe, edit thì oke</td>
+            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe </td>
         </tr>
         <tr>
             <td>2</td>
@@ -160,7 +160,7 @@
             <td>
                 <a href="#" class="btn btn-info">Edit</a>
             </td>
-            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe, edit thì oke</td>
+            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe </td>
         </tr>
         <tr>
             <td>3</td>
@@ -168,16 +168,7 @@
             <td>
                 <a href="#" class="btn btn-info">Edit</a>
             </td>
-            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe, edit thì oke</td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td>10 tháng</td>
-            <td>
-                <a href="#" class="btn btn-info">Edit</a>
-                <a href="#" class="btn btn-danger delete">Delete</a>
-            </td>
-            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe, edit thì oke</td>
+            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe </td>
         </tr>
     </table>
     <!-- Button trigger modal -->
@@ -200,16 +191,16 @@
                         <input type="text" name="name" required>
                         <br>
                         <label for="">Số tháng kỳ hạn:</label>
-                        <input type="number" name="month" min="1" value="1">
+                        <input type="number" name="numOfMonths" min="1" value="1">
                         <br>
                         <label for="">Lãi suất: </label>
-                        <input type="number" min="0.0001" step="0.0001" value="0.0055" name="laisuat">
+                        <input type="number" min="0.0001" step="0.0001" value="0.0055" name="interestRate">
                         <br>
                         <label for="">Thời gian gởi tối thiểu(đơn vị: ngày) :</label>
-                        <input type="number" name="minDate" min="1" value="10">
+                        <input type="number" name="minimumDay" min="1" value="10">
                         <br>
                         <label for="">Số tiền gửi tối thiểu: </label>
-                        <input type="number" name="min_deposit" step="10000" min="10000" value="100000">
+                        <input type="number" name="minDeposit" step="10000" min="10000" value="100000">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary">Add</button>
@@ -220,22 +211,23 @@
         </div>
     </div>
     <br>
+    <p>Hãy thêm rồi delete</p>
     <p class="mt-4 text-danger fw-bold d-inline-block">Xóa kỳ hạn có type chỉ định: </p>
     <label for="">Nhập loại: </label>
-    <input type="number" id="delete-kyhanInput" required min="1">
+    <input type="number" id="delete-kyhanInput" required min="3" value="3">
     <button class="btn btn-danger" id="delete-kyhanBtn">Delete</button>
     <hr><br>
     <h1>Cập nhật kỳ hạn: </h1>
     <form action="http://localhost:8080/api/kyhan" method="PUT" id="update-kyhan">
         <input type="number" name="type" value="3" hidden>
         <label for="">Số tiền gửi tối thiểu: </label>
-        <input type="number" name="min_deposit" step="10000" min="10000" value="100000">
+        <input type="number" name="minDeposit" step="10000" min="10000" value="100000">
         <br>
         <label for="">Thời gian gởi tối thiểu(đơn vị: ngày) :</label>
-        <input type="number" name="minDay" min="1" value="10">
+        <input type="number" name="minimumDay" min="1" value="10">
         <br>
         <label for="">Lãi suất: </label>
-        <input type="number" min="0.0001" step="0.0001" value="0.0055" name="laisuat">
+        <input type="number" min="0.0001" step="0.0001" value="0.0055" name="interestRate">
         <br>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
@@ -273,7 +265,7 @@
                     type: "DELETE",
                     url: `${url}/${id}`,
                     success: function (data) {
-                        alert("Delete successful! id " + id);
+                        alert("Kiểm tra IDE nếu không báo lỗi thì thành công ");
                     },
                     error: function (e) {
                         alert("Error deleting object has id " + id + " lets check list object to see")
@@ -286,7 +278,7 @@
         // DELETE Customer by makh
         $("#delete-makhBtn").click(function () {
             const makh = parseInt($("#delete-makhInput").val()) | 0;
-            const url = "http://localhost:8080/api/customer";
+            const url = "http://localhost:8080/api/customer-passbook";
             deleteAjaxRequest(url, makh);
         });
         // DELETE Ky han by type
@@ -305,7 +297,7 @@
                 url: actionUrl,
                 data: form.serialize(), // serializes the form's elements.
                 success: function (data, code) {
-                    alert("Update thanh cong!" + code); // show response from the php script.
+                    alert("Update thành công"); // show response from the php script.
                 }
             });
 
