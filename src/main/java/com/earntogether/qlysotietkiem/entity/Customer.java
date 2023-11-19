@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "tbl_customer")
+@Document(collection = "tbl_customer_passbook")
 public class Customer {
     @MongoId(FieldType.OBJECT_ID)
     private String id;

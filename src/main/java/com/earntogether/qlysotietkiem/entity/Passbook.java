@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "tbl_sotietkiem")
+@Document(collection = "tbl_passbook")
 public class Passbook {
     @MongoId(FieldType.OBJECT_ID)
     private String id;

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "tbl_phieuruttien")
+@Document(collection = "tbl_withdrawalSlip")
 public class WithdrawalSlip {
     @MongoId(FieldType.OBJECT_ID)
     private String id;
