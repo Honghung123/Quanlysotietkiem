@@ -139,38 +139,7 @@
     <hr><br>
     <h1>Change regulations</h1>
     <a href="http://localhost:8080/api/term" class="btn showLink bg-pink m-2">Danh sách kỳ hạn</a>
-    <table class="table table-bordered regulations">
-        <tr>
-            <th>STT</th>
-            <th>Tên kỳ hạn</th>
-            <th>Action</th>
-            <th width="50%">Note</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Không kỳ hạn</td>
-            <td>
-                <a href="#" class="btn btn-info">Edit</a>
-            </td>
-            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe </td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>3 tháng</td>
-            <td>
-                <a href="#" class="btn btn-info">Edit</a>
-            </td>
-            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>6 tháng</td>
-            <td>
-                <a href="#" class="btn btn-info">Edit</a>
-            </td>
-            <td>Không nên delete kỳ hạn này bởi vì thêm lại rất mệt hehe </td>
-        </tr>
-    </table>
+
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Thêm kỳ hạn
@@ -188,7 +157,7 @@
                 <div class="modal-body">
                     <form action="http://localhost:8080/api/term" method="POST">
                         <label for="">Chọn loại kỳ hạn:</label>
-                        <input type="number" name="monthsOfTerm" min="1" value="1" width="5%"> Tháng
+                        <input type="number" name="monthsOfTerm" min="0" value="1" width="5%"> Tháng
                         <br>
                         <label for="">Lãi suất: </label>
                         <input type="number" min="0.0001" step="0.0001" value="0.005" name="interestRate">
@@ -205,21 +174,21 @@
         </div>
     </div>
     <br>
-    <p class="mt-4 text-danger fw-bold d-inline-block">Xóa kỳ hạn có type chỉ định: </p>
-    <p>Hãy thêm rồi delete</p>
-    <label for="">Nhập loại: </label>
-    <input type="number" id="delete-termInput" required min="3" value="3">
+    <p class="mt-4 text-danger fw-bold d-inline-block">Xóa kỳ hạn </p>
+    <label for="">Nhập type: </label>
+    <input type="number" id="delete-termInput" required min="0" value="1">
     <button class="btn btn-danger" id="delete-termBtn">Delete</button>
     <hr><br>
-    <h1>Cập nhật kỳ hạn(test cho sổ có type = 3): </h1>
+    <h1>Cập nhật kỳ hạn: </h1>
     <form action="http://localhost:8080/api/term" method="" id="update-term">
-        <input type="number" name="type" value="3" hidden>
+        <label for="">Chọn loại kỳ hạn type = </label>
+        <input type="number" name="type" value="3" min="0">
         <label for="">Số tiền gửi tối thiểu: </label>
         <input type="number" name="minDeposit" step="10000" min="10000" value="100000">
         <br>
         <label for="">Thời gian gởi tối thiểu(đơn vị: tháng) :</label>
         <input type="number" name="minDepositTime" min="0" value="0">
-        <span class="text-danger">*Chỉ áp dụng cho loại Không kỳ hạn, mặc định để 0</span>
+        <span class="text-danger">*Chỉ áp dụng cho loại Không kỳ hạn(0 tháng), mặc định để 0</span>
         <br>
         <label for="">Lãi suất: </label>
         <input type="number" min="0.0001" step="0.0001" value="0.0055" name="interestRate">
@@ -255,7 +224,7 @@
         })
         function deleteAjaxRequest(url, id) {
             const isConfirmed = confirm(`Are you sure you want to delete id: ${id}`);
-            if (isConfirmed && id != 0) {
+            if (isConfirmed && id != -1) {
                 $.ajax({
                     type: "DELETE",
                     url: `${url}/${id}`,
@@ -266,19 +235,19 @@
                         alert("Error deleting object has id " + id + " lets check list object to see")
                     }
                 });
-            } else if (isConfirm && id == 0) {
+            } else if (isConfirm && id == -1) {
                 alert("Field must not be empty");
             }
         }
         // DELETE Customer by makh
         $("#delete-makhBtn").click(function () {
-            const makh = parseInt($("#delete-makhInput").val()) | 0;
+            const makh = $("#delete-makhInput").val() != "" ? parseInt($("#delete-makhInput").val()) : -1;
             const url = "http://localhost:8080/api/customer-passbook";
             deleteAjaxRequest(url, makh);
         });
         // DELETE term by type
         $("#delete-termBtn").click(function () {
-            const id = parseInt($("#delete-termInput").val()) | 0;
+            const id = $("#delete-termInput").val() != "" ? parseInt($("#delete-termInput").val()) : -1;
             const url = "http://localhost:8080/api/term";
             deleteAjaxRequest(url, id);
         });

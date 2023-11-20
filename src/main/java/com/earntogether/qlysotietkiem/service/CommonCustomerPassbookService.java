@@ -37,11 +37,14 @@ public class CommonCustomerPassbookService {
 
     // CustomerService
     public void deleteCustomerByCustomerCode(int code){
-        var deletedCustomer = customerRepository.deleteByCustomerCode(code).orElseThrow(
-                () -> new DataNotValidException(400, "Không tồn tại khách " +
-                        "hàng có makh : " + code));
-        updateStatus(deletedCustomer.getPassbook().getPassbookCode(), 0);
-        System.out.println("-> Deleted " + deletedCustomer);
+        customerRepository.deleteByCustomerCode(code).ifPresentOrElse(
+                deletedCustomer -> {
+                    updateStatus(deletedCustomer.getPassbook().getPassbookCode(), 0);
+                    System.out.println("-> Deleted " + deletedCustomer);
+                },
+                () -> { throw new DataNotValidException(400, "Không tồn tại " +
+                        "khách hàng có makh : " + code);}
+        );
     }
 
     public Optional<Customer> getCustomersByNameAndPassbookCode(String name,

@@ -44,7 +44,7 @@ public class TermController {
 
     @DeleteMapping("/{type}")
     public String deleteTerm(@PathVariable int type){
-        termService.deleteByType(type);
+        termService.deleteTermByType(type);
         return "{\"message\": \"Xoá kỳ hạn thành công\"}";
     }
 }

@@ -21,9 +21,11 @@ public class TermService {
     }
 
     public void insertTerm(TermInsertDTO termInsertDto) {
+        var termName = termInsertDto.monthsOfTerm() == 0 ?
+                 "Không kỳ hạn" : termInsertDto.monthsOfTerm() + " tháng";
         if(termRepository.findByMonthsOfTerm(termInsertDto.monthsOfTerm()).isPresent()){
             throw new DataNotValidException(400,
-                    "Đã tồn tại kỳ hạn " + termInsertDto.monthsOfTerm() + " tháng");
+                    "Đã tồn tại kỳ hạn " + termName);
         }
         int type = this.generateNewType();
         Term term = TermConverter.convertDTOtoEntity(termInsertDto, type);
@@ -32,16 +34,20 @@ public class TermService {
     }
 
     private int generateNewType() {
-        int newType = 1;
+        int newType = 0;
         while(termRepository.findByType(newType).isPresent()){
             newType++;
         }
         return newType;
     }
 
-    public void deleteByType(int type){
-        termRepository.deleteByType(type);
-        System.out.println("Deleted kỳ hạn có type = " + type);
+    public void deleteTermByType(int type){
+        termRepository.deleteByType(type).ifPresentOrElse(
+                term -> System.out.println("-> Deleted kỳ hạn có type = " + type),
+                () -> {throw new ResourceNotFoundException(404, "Không thể " +
+                        "xóa vì không tồn tại kỳ hạn có type = " + type);}
+        );
+
     }
 
     public Term getTermByType(int type) {

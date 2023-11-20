@@ -25,7 +25,7 @@ import java.util.*;
 public class CustomerService {
     private CustomerRepository customerRepository;
     private PassbookService passbookService;
-    private TermRepository kyhanRepository;
+    private TermRepository termRepository;
 
     public List<Customer> getAllCustomer(){
         return customerRepository.findAll();
@@ -34,20 +34,19 @@ public class CustomerService {
     public Customer getCustomerByCustomerCode(int code){
         var customer = customerRepository.findByCustomerCode(code).orElseThrow(
                 () -> new ResourceNotFoundException(404, "Khong ton tai" +
-                " khach hang co ma khach hang: " + code));
+                        " khach hang co ma khach hang: " + code));
         return customer;
     }
 
     public void insertCustomerPassbook(CustomerPassbookDTO cusPassbookDto){
-        // Get kyhan instance by type
-        var kyhan =
-                kyhanRepository.findByType(cusPassbookDto.type()).orElseThrow(
-                () -> new ResourceNotFoundException(400, "Không tồn tại " +
-                        "kỳ hạn có type = " + cusPassbookDto.type()));
+        // Get term instance by type
+        var term = termRepository.findByType(cusPassbookDto.type())
+                .orElseThrow(() -> new ResourceNotFoundException(404,
+                    "Không tồn tại kỳ hạn chỉ định. Vui lòng tạo mới kỳ hạn"));
         // Check money sent if is lower than minimum deposit
-        if(cusPassbookDto.money().compareTo(kyhan.getMinDeposit()) < 0){
+        if(cusPassbookDto.money().compareTo(term.getMinDeposit()) < 0){
             throw new DataNotValidException(400, "Số tiền gửi không được nhỏ " +
-                    "hơn số tiền tối thiểu là " + kyhan.getMinDeposit());
+                    "hơn số tiền tối thiểu là " + term.getMinDeposit());
         }
         // Check if identity number is exist
         if(customerRepository.findByIdentityNumber(cusPassbookDto.identityNumber()).isPresent()){
@@ -67,7 +66,7 @@ public class CustomerService {
         int newPassbookCode = passbookService.getNewPassbookCode();
         var passbook = new Passbook(null, newPassbookCode,1,
                 cusPassbookDto.type(), cusPassbookDto.dateOpened(),
-                cusPassbookDto.money(), kyhan);
+                cusPassbookDto.money(), term);
         customer.setPassbook(passbook);
         customerRepository.save(customer);
         passbookService.insertPassbook(passbook);

@@ -12,5 +12,5 @@ public interface TermRepository extends MongoRepository<Term, String> {
 
     Optional<Term> findByMonthsOfTerm(int monthsOfTerm);
 
-    void deleteByType(int type);
+    Optional<Term> deleteByType(int type);
 }
