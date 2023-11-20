@@ -9,14 +9,13 @@ một file html rồi mở file html bằng live server của vscode cx được
 - Tạo collection ***tbl_customer_passbook***, ***tbl_depositSlip***, 
   ***tbl_withdrawalSlip*** và ***tbl_passbook*** (Không cần chứa dữ liệu) 
 - Tạo collection ***tbl_kyhan*** rồi nhấn INSERT DOCUMENT rồi lần lượt thêm 3 
-  cái này (Thực ra không thêm cũng được, nhưng muốn đăng ký sổ tiết kiệm thì 
-  bắt buộc phải có kỳ hạn)
+  cái này (**Thực ra không thêm cũng được, nhưng muốn đăng ký sổ tiết kiệm thì bắt buộc phải có kỳ hạn**)
 
-{"_id":{"$oid":"654d9fbaf1aded54971329da"},"type":{"$numberInt":"0"},"name":"Không kỳ hạn","dcguithem":{"$numberLong":"100000"},"ngaydcrut":{"$numberInt":"15"},"minDeposit":{"$numberLong":"100000"},"numOfMonths":{"$numberInt":"0"},"interestRate":{"$numberDouble":"0.0015"}}
+{"_id":{"$oid":"655b6d8fffe0b4786218ac18"},"type":{"$numberInt":"0"},"name":"Không kỳ hạn","monthsOfTerm":{"$numberInt":"0"},"interestRate":{"$numberDouble":"0.0015"},"minDeposit":"100000","minAdditionalDeposit":"100000","daysWithdrawn":{"$numberInt":"15"},"minDepositTime":{"$numberInt":"1"},"_class":"com.earntogether.qlysotietkiem.entity.Term"}
 
-{"_id":{"$oid":"655451ecdbe7bc0182ccb200"},"type":{"$numberInt":"1"},"name":"6 tháng","dcguithem":{"$numberLong":"0"},"ngaydcrut":{"$numberInt":"15"},"interestRate":{"$numberDouble":"0.0055"},"minDeposit":{"$numberLong":"100000"},"numOfMonths":{"$numberInt":"6"}}
+{"_id":{"$oid":"655b6dc9ffe0b4786218ac19"},"type":{"$numberInt":"1"},"name":"3 tháng","monthsOfTerm":{"$numberInt":"3"},"interestRate":{"$numberDouble":"0.005"},"minDeposit":"100000","minAdditionalDeposit":"0","daysWithdrawn":{"$numberInt":"15"},"minDepositTime":{"$numberInt":"0"},"_class":"com.earntogether.qlysotietkiem.entity.Term"}
 
-{"_id":{"$oid":"6554520adbe7bc0182ccb201"},"type":{"$numberInt":"2"},"name":"3 tháng","dcguithem":{"$numberLong":"0"},"ngaydcrut":{"$numberInt":"15"},"interestRate":{"$numberDouble":"0.005"},"minDeposit":{"$numberLong":"100000"},"numOfMonths":{"$numberInt":"3"}}
+{"_id":{"$oid":"655b6ddfffe0b4786218ac1a"},"type":{"$numberInt":"2"},"name":"6 tháng","monthsOfTerm":{"$numberInt":"6"},"interestRate":{"$numberDouble":"0.0055"},"minDeposit":"100000","minAdditionalDeposit":"0","daysWithdrawn":{"$numberInt":"15"},"minDepositTime":{"$numberInt":"0"},"_class":"com.earntogether.qlysotietkiem.entity.Term"}
 
 
 * Note: Tạo xong thì nhớ copy ConnectionString của bạn đã copy lúc tạo rồi 
