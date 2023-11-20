@@ -5,7 +5,7 @@ import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.model.AccountingModel;
 import com.earntogether.qlysotietkiem.model.ReportModel;
-import com.earntogether.qlysotietkiem.repository.KyHanRepository;
+import com.earntogether.qlysotietkiem.repository.TermRepository;
 import com.earntogether.qlysotietkiem.repository.PassbookRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -18,7 +18,7 @@ import java.util.*;
 @AllArgsConstructor
 public class PassbookService {
     private PassbookRepository passbookRepository;
-    private KyHanRepository kyhanRepository;
+    private TermRepository kyhanRepository;
     private CommonCustomerPassbookService commonCustomerPassbookService;
 
     public List<Passbook> getAll(){

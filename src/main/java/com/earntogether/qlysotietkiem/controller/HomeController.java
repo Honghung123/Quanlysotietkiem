@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-public class HelloController{
+public class HomeController {
     @GetMapping("/")
     public ModelAndView helloWorld(){
         ModelAndView modelAndView = new ModelAndView();

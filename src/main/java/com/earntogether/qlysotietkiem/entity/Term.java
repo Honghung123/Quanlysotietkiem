@@ -15,22 +15,24 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "tbl_kyhan")
-public class KyHan {
+@Document(collection = "tbl_term")
+public class Term {
     @MongoId(FieldType.OBJECT_ID)
     private String id;
     @Field(name = "type")
     private int type;
     @Field(name = "name")
     private String name;
-    @Field(name = "numOfMonths")
-    private int numOfMonths;
+    @Field(name = "monthsOfTerm")
+    private int monthsOfTerm;
     @Field(name = "interestRate")
     private Double interestRate;
-    @Field("dcguithem")
-    private BigInteger duocGuiThem;
-    @Field(name = "ngaydcrut")
-    private int ngayDcRut;
     @Field(name = "minDeposit")
     private BigInteger minDeposit;
+    @Field("minAdditionalDeposit")
+    private BigInteger minAdditionalDeposit;
+    @Field(name = "daysWithdrawn")
+    private int daysWithdrawn;
+    @Field(name = "minDepositTime")
+    private int minDepositTime;
 }

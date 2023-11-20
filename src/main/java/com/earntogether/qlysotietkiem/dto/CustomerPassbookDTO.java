@@ -9,7 +9,7 @@ public record CustomerPassbookDTO(
         @Positive(message = "Mã số không hợp lệ") int customerCode,
         @NotEmpty(message = "Tên khách hàng trống") String name,
         @NotEmpty(message = "Địa chỉ không trống") String address,
-        @Min(value = 1,message = "Số tiền không hợp lệ") BigInteger money,
+        @NotNull(message = "Số tiền không hợp lệ") BigInteger money,
         @PositiveOrZero int type,
         @NotEmpty(message = "Chứng minh nhân dân không hợp lệ") String identityNumber,
         @NotNull(message = "Ngày mở sổ không hợp lệ") LocalDate dateOpened

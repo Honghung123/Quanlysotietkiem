@@ -5,7 +5,6 @@ import com.earntogether.qlysotietkiem.entity.Customer;
 import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.model.DepositSlipModel;
-import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
 import com.earntogether.qlysotietkiem.repository.DepositSlipRepository;
 import com.earntogether.qlysotietkiem.utils.converter.DepositConverter;
 import lombok.AllArgsConstructor;
@@ -35,13 +34,13 @@ public class DepositSlipService {
                                 " có mã sổ: " + depositSlipDto.passbookCode()));
         // Kiểm tra loại tiết kiệm
         var passbook = customer.getPassbook();
-        if(passbook.getKyHan().getType() != 0){
+        if(passbook.getTerm().getType() != 0){
             throw new DataNotValidException(400, "Chỉ chấp nhận gửi tiền " +
                         "đối với loại sổ không kỳ hạn");
         }
-        if(depositSlipDto.money().compareTo(passbook.getKyHan().getMinDeposit()) < 0){
+        if(depositSlipDto.money().compareTo(passbook.getTerm().getMinDeposit()) < 0){
             throw new DataNotValidException(400, "Số tiền gửi không được " +
-              "nhỏ hơn số tiền gởi tối thiểu là " + passbook.getKyHan().getMinDeposit());
+              "nhỏ hơn số tiền gởi tối thiểu là " + passbook.getTerm().getMinDeposit());
         }
         if(depositSlipDto.depositDate().isAfter(LocalDate.now())){
             throw new DataNotValidException(400, "Ngày gửi không thể vượt" +

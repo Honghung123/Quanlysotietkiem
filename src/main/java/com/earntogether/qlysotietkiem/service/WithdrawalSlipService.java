@@ -3,7 +3,6 @@ package com.earntogether.qlysotietkiem.service;
 import com.earntogether.qlysotietkiem.dto.WithdrawalSlipDTO;
 import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
-import com.earntogether.qlysotietkiem.model.DepositSlipModel;
 import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
 import com.earntogether.qlysotietkiem.repository.WithdrawalSlipRepository;
 import com.earntogether.qlysotietkiem.utils.converter.WithdrawalConverter;
@@ -32,7 +31,7 @@ public class WithdrawalSlipService {
                         "Không tồn tại khách hàng: " + withdrawalSlipDto.customerName()
                                 + " có mã sổ: " + withdrawalSlipDto.passbookCode()));
         var passbook = customer.getPassbook();
-        var kyhan = passbook.getKyHan();
+        var kyhan = passbook.getTerm();
         // Kiểm tra thời gian mở sổ có đủ điều kiện được rút
         var currentDate = LocalDate.now();
         if(withdrawalSlipDto.withdrawalDate().isAfter(currentDate)){
@@ -41,10 +40,10 @@ public class WithdrawalSlipService {
         }
         var dateOpened = passbook.getDateCreated();
         boolean hasQualifiedToTakeOut = ChronoUnit.DAYS.between(dateOpened,
-                    currentDate) >= kyhan.getNgayDcRut();
+                    currentDate) >= kyhan.getDaysWithdrawn();
         if (!hasQualifiedToTakeOut){
             throw new DataNotValidException(400, "Bạn không thể rút tiền " +
-                "vì thời gian số ngày mở sổ của bạn chưa đủ " + kyhan.getNgayDcRut());
+                "vì số ngày mở sổ của bạn chưa đủ " + kyhan.getDaysWithdrawn());
         }
 
         if(kyhan.getType() == 0){
@@ -58,7 +57,7 @@ public class WithdrawalSlipService {
         }else{
             // Kiểm tra xem sổ đã quá kì hạn chưa
             boolean isOverDue = ChronoUnit.DAYS.between(dateOpened,
-                        currentDate) >= kyhan.getNumOfMonths();
+                        currentDate) >= kyhan.getMonthsOfTerm();
             if(!isOverDue){
                 throw new DataNotValidException(400, "Sổ vẫn chưa đáo " +
                             "hạn, không thể rút");

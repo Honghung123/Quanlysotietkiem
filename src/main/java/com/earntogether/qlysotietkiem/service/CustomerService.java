@@ -7,22 +7,16 @@ import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.model.PassbookModel;
 import com.earntogether.qlysotietkiem.repository.CustomerRepository;
-import com.earntogether.qlysotietkiem.repository.KyHanRepository;
+import com.earntogether.qlysotietkiem.repository.TermRepository;
 import com.earntogether.qlysotietkiem.utils.converter.CustomerConverter;
 import com.earntogether.qlysotietkiem.utils.converter.PassBookConverter;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,7 +25,7 @@ import java.util.*;
 public class CustomerService {
     private CustomerRepository customerRepository;
     private PassbookService passbookService;
-    private KyHanRepository kyhanRepository;
+    private TermRepository kyhanRepository;
 
     public List<Customer> getAllCustomer(){
         return customerRepository.findAll();

@@ -29,5 +29,5 @@ public class Passbook {
     @Field(name = "money")
     private BigInteger money;
     @Field(name = "kyHan")
-    private KyHan kyHan;
+    private Term term;
 }

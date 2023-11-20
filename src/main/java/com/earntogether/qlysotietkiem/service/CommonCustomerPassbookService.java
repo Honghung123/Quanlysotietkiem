@@ -32,7 +32,7 @@ public class CommonCustomerPassbookService {
     private CustomerRepository customerRepository;
     private DepositSlipRepository depositSlipRepository;
     private WithdrawalSlipRepository withdrawalSlipRepository;
-    private KyHanRepository kyhanRepository;
+    private TermRepository kyhanRepository;
     private PassbookRepository passbookRepository;
 
     // CustomerService
