@@ -138,7 +138,7 @@
     </form>
     <hr><br>
     <h1>Change regulations</h1>
-    <a href="http://localhost:8080/api/kyhan" class="btn showLink bg-pink m-2">Danh sách kỳ hạn</a>
+    <a href="http://localhost:8080/api/term" class="btn showLink bg-pink m-2">Danh sách kỳ hạn</a>
     <table class="table table-bordered regulations">
         <tr>
             <th>STT</th>
@@ -186,18 +186,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="http://localhost:8080/api/kyhan" method="POST">
-                        <label for="">Tên kỳ hạn:</label>
-                        <input type="text" name="name" required>
-                        <br>
-                        <label for="">Số tháng kỳ hạn:</label>
-                        <input type="number" name="numOfMonths" min="1" value="1">
+                    <form action="http://localhost:8080/api/term" method="POST">
+                        <label for="">Chọn loại kỳ hạn:</label>
+                        <input type="number" name="monthsOfTerm" min="1" value="1" width="5%"> Tháng
                         <br>
                         <label for="">Lãi suất: </label>
-                        <input type="number" min="0.0001" step="0.0001" value="0.0055" name="interestRate">
-                        <br>
-                        <label for="">Thời gian gởi tối thiểu(đơn vị: ngày) :</label>
-                        <input type="number" name="minimumDay" min="1" value="10">
+                        <input type="number" min="0.0001" step="0.0001" value="0.005" name="interestRate">
                         <br>
                         <label for="">Số tiền gửi tối thiểu: </label>
                         <input type="number" name="minDeposit" step="10000" min="10000" value="100000">
@@ -211,20 +205,21 @@
         </div>
     </div>
     <br>
-    <p>Hãy thêm rồi delete</p>
     <p class="mt-4 text-danger fw-bold d-inline-block">Xóa kỳ hạn có type chỉ định: </p>
+    <p>Hãy thêm rồi delete</p>
     <label for="">Nhập loại: </label>
-    <input type="number" id="delete-kyhanInput" required min="3" value="3">
-    <button class="btn btn-danger" id="delete-kyhanBtn">Delete</button>
+    <input type="number" id="delete-termInput" required min="3" value="3">
+    <button class="btn btn-danger" id="delete-termBtn">Delete</button>
     <hr><br>
-    <h1>Cập nhật kỳ hạn: </h1>
-    <form action="http://localhost:8080/api/kyhan" method="PUT" id="update-kyhan">
+    <h1>Cập nhật kỳ hạn(test cho sổ có type = 3): </h1>
+    <form action="http://localhost:8080/api/term" method="" id="update-term">
         <input type="number" name="type" value="3" hidden>
         <label for="">Số tiền gửi tối thiểu: </label>
         <input type="number" name="minDeposit" step="10000" min="10000" value="100000">
         <br>
-        <label for="">Thời gian gởi tối thiểu(đơn vị: ngày) :</label>
-        <input type="number" name="minimumDay" min="1" value="10">
+        <label for="">Thời gian gởi tối thiểu(đơn vị: tháng) :</label>
+        <input type="number" name="minDepositTime" min="0" value="0">
+        <span class="text-danger">*Chỉ áp dụng cho loại Không kỳ hạn, mặc định để 0</span>
         <br>
         <label for="">Lãi suất: </label>
         <input type="number" min="0.0001" step="0.0001" value="0.0055" name="interestRate">
@@ -281,14 +276,14 @@
             const url = "http://localhost:8080/api/customer-passbook";
             deleteAjaxRequest(url, makh);
         });
-        // DELETE Ky han by type
-        $("#delete-kyhanBtn").click(function () {
-            const id = parseInt($("#delete-kyhanInput").val()) | 0;
-            const url = "http://localhost:8080/api/kyhan";
+        // DELETE term by type
+        $("#delete-termBtn").click(function () {
+            const id = parseInt($("#delete-termInput").val()) | 0;
+            const url = "http://localhost:8080/api/term";
             deleteAjaxRequest(url, id);
         });
-        // Update kyhan by type
-        $("#update-kyhan").submit(function (e) {
+        // Update term by type
+        $("#update-term").submit(function (e) {
             e.preventDefault(); // avoid to execute the actual submit of the form.
             var form = $(this);
             var actionUrl = form.attr('action');
@@ -296,8 +291,8 @@
                 type: "PUT",
                 url: actionUrl,
                 data: form.serialize(), // serializes the form's elements.
-                success: function (data, code) {
-                    alert("Update thành công"); // show response from the php script.
+                success: function (data) {
+                    alert("Kiểm tra nếu IDE không ném lỗi thì thành công");
                 }
             });
 
