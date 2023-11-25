@@ -33,7 +33,7 @@ public class CustomerService {
 
     public Customer getCustomerByCustomerCode(int code){
         var customer = customerRepository.findByCustomerCode(code).orElseThrow(
-                () -> new ResourceNotFoundException(404, "Khong ton tai" +
+                () -> new ResourceNotFoundException("Khong ton tai" +
                         " khach hang co ma khach hang: " + code));
         return customer;
     }
@@ -45,29 +45,33 @@ public class CustomerService {
                     "Không tồn tại kỳ hạn chỉ định. Vui lòng tạo mới kỳ hạn"));
         // Check money sent if is lower than minimum deposit
         if(cusPassbookDto.money().compareTo(term.getMinDeposit()) < 0){
-            throw new DataNotValidException(400, "Số tiền gửi không được nhỏ " +
+            throw new DataNotValidException("Số tiền gửi không được nhỏ " +
                     "hơn số tiền tối thiểu là " + term.getMinDeposit());
         }
         // Check if identity number is exist
         if(customerRepository.findByIdentityNumber(cusPassbookDto.identityNumber()).isPresent()){
-            throw new DataNotValidException(400, "Đã tồn tại khách hàng có " +
+            throw new DataNotValidException("Đã tồn tại khách hàng có " +
                     "Chứng minh nhân dân: " + cusPassbookDto.identityNumber());
         }
         // Check if the opened date's passbook is over than present
         if(cusPassbookDto.dateOpened().isAfter(LocalDate.now())){
-            throw new DataNotValidException(400, "Ngày mở sổ không được vượt" +
+            throw new DataNotValidException("Ngày mở sổ không được vượt" +
                     " quá ngày hiện tại") ;
         }
 
         Customer customer = CustomerConverter.covertDTOtoEntity(cusPassbookDto);
-        // Tạo makh cho Customer đăng kí mới
+        // Tạo mã khách hàng cho Customer đăng kí mới
         customer.setCustomerCode(getNewCustomerCode());
-        // Tạo Mã sổ tiet kiem
-        int newPassbookCode = passbookService.getNewPassbookCode();
-        var passbook = new Passbook(null, newPassbookCode,1,
-                cusPassbookDto.type(), cusPassbookDto.dateOpened(),
-                cusPassbookDto.money(), term);
-        customer.setPassbook(passbook);
+        // Kiểm tra mã sổ tồn tại chưa
+        int passbookCode = customer.getPassbookCode();
+        passbookService.getPassbookByCode(passbookCode).ifPresent(
+                passbook -> {throw new DataNotValidException("Đã tồn tại mã " +
+                        "sổ tiết kiệm: "+ passbook.getPassbookCode());}
+        );
+        // Tạo sổ tiết kiệm
+        var passbook = new Passbook(null, passbookCode,
+                customer.getCustomerCode(), 1, term,
+                cusPassbookDto.dateOpened(), cusPassbookDto.money());
         customerRepository.save(customer);
         passbookService.insertPassbook(passbook);
         System.out.println("-> Inserted " + customer);
@@ -79,44 +83,5 @@ public class CustomerService {
             newCode++;
         }
         return newCode;
-    }
-
-    public void deletePassbookByCustomerCode(int code) {
-        var customer = customerRepository.findByCustomerCode(code).orElseThrow(
-                () -> new ResourceNotFoundException(404, "Không tìm thấy " +
-                        "khách hàng có mã: " + code));
-        int passbookCode = customer.getPassbook().getPassbookCode();
-        passbookService.updateStatus(passbookCode ,0);
-        customer.setPassbook(null);
-        customerRepository.save(customer);
-    }
-    public List<PassbookModel> lookupPassbooks() {
-        List<Customer> customers = this.getAllCustomer();
-        return customers.stream()
-                .filter(customer -> customer.getPassbook()!=null)
-                .map(PassBookConverter::convertEntityToModel)
-                .toList();
-    }
-
-    public Map<String, Object> lookupPassbooks(int page, int per_page,
-                                                String sortBy) {
-        Sort sort = Sort.by(sortBy);
-        Pageable pageable = PageRequest.of(page, per_page, sort);
-        Page<Customer> customerPages = this.getAllWithPagination(pageable);
-        var customerList = customerPages.getContent();
-        List<PassbookModel> soTkList = customerList.stream()
-                .filter(customer -> customer.getPassbook() != null)
-                .map(PassBookConverter::convertEntityToModel)
-                .toList();
-        Map<String, Object> cusPassbookMap = new LinkedHashMap<>();
-        cusPassbookMap.put("data", soTkList);
-        cusPassbookMap.put("total_pages", customerPages.getTotalPages());
-        cusPassbookMap.put("total_element", customerPages.getTotalElements());
-        cusPassbookMap.put("page", customerPages.getNumber());
-        return cusPassbookMap;
-    }
-
-    public Page<Customer> getAllWithPagination(Pageable pageable) {
-        return customerRepository.findAll(pageable);
     }
 }

@@ -1,9 +1,6 @@
 package com.earntogether.qlysotietkiem.service;
 
-import com.earntogether.qlysotietkiem.entity.Customer;
-import com.earntogether.qlysotietkiem.entity.Passbook;
-import com.earntogether.qlysotietkiem.entity.DepositSlip;
-import com.earntogether.qlysotietkiem.entity.WithdrawalSlip;
+import com.earntogether.qlysotietkiem.entity.*;
 import com.earntogether.qlysotietkiem.exception.DataNotValidException;
 import com.earntogether.qlysotietkiem.exception.ResourceNotFoundException;
 import com.earntogether.qlysotietkiem.repository.*;
@@ -12,8 +9,11 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,36 +32,33 @@ public class CommonCustomerPassbookService {
     private CustomerRepository customerRepository;
     private DepositSlipRepository depositSlipRepository;
     private WithdrawalSlipRepository withdrawalSlipRepository;
-    private TermRepository kyhanRepository;
+    private TermRepository termRepository;
     private PassbookRepository passbookRepository;
 
     // CustomerService
-    public void deleteCustomerByCustomerCode(int code){
+    public void deleteCustomerByCustomerCode(int code) {
         customerRepository.deleteByCustomerCode(code).ifPresentOrElse(
                 deletedCustomer -> {
-                    updateStatus(deletedCustomer.getPassbook().getPassbookCode(), 0);
+                    updatePassbookStatus(deletedCustomer.getPassbookCode(), 0);
                     System.out.println("-> Deleted " + deletedCustomer);
                 },
-                () -> { throw new DataNotValidException(400, "Không tồn tại " +
+                () -> { throw new DataNotValidException("Không tồn tại " +
                         "khách hàng có makh : " + code);}
         );
     }
 
-    public Optional<Customer> getCustomersByNameAndPassbookCode(String name,
+    public Optional<Customer> getCustomerByNameAndPassbookCode(String name,
                                                                 int code){
-        return customerRepository.findByNameAndPassbookPassbookCode(name, code);
+        return customerRepository.findByNameAndPassbookCode(name, code);
     }
 
-    public void updateMoneyByCustomerCode( @Positive int code,
+    public void updateMoneyByPassbookCode( @Positive int code,
                                            @NotNull BigInteger money){
-        var customer = customerRepository.findByCustomerCode(code).orElseThrow(
-                () -> new ResourceNotFoundException(404, "Không tồn tại khách " +
-                        "hàng có mã: " + code));
-        var passbook = customer.getPassbook();
+        var passbook = passbookRepository.findByPassbookCode(code)
+                .orElseThrow(() -> new ResourceNotFoundException(404, ""));
         passbook.setMoney(money);
-        customer.setPassbook(passbook);
-        System.out.println(customer);
-        customerRepository.save(customer);
+        System.out.println(passbook);
+        passbookRepository.save(passbook);
     }
     public String getNameByCustomerCode(int code) {
         var customer = customerRepository.findByCustomerCode(code).orElseThrow(
@@ -71,7 +68,7 @@ public class CommonCustomerPassbookService {
     }
 
     // PassbookService
-    public void updateStatus(int code, int status){
+    public void updatePassbookStatus(int code, int status){
         Passbook passbook = passbookRepository.findByPassbookCode(code)
                 .orElseThrow(() -> new ResourceNotFoundException(404,
                         "Không tìm thấy sổ tiết kiệm có mã = " + code));
@@ -97,5 +94,20 @@ public class CommonCustomerPassbookService {
                 .map(WithdrawalSlip::getMoney)
                 .reduce(BigInteger.valueOf(0), BigInteger::add);
         return sumMoney;
+    }
+
+    // Passbook Service
+    public BigInteger calculateInterestRate(Passbook passbook){
+        // Tính số lần đáo hạn
+        var term = passbook.getTerm();
+        int monthsFromPassbookOpened = Math.toIntExact(ChronoUnit.MONTHS
+                .between(passbook.getDateCreated(), LocalDate.now()));
+        // Dùng floorDiv để lấy phần nguyên cho an toàn
+        int timesMaturity = Math.floorDiv(monthsFromPassbookOpened,
+                                        term.getMonthsOfTerm());
+        double interestRate = (double)timesMaturity * term.getInterestRate()
+                            * (double)term.getMonthsOfTerm()
+                            * passbook.getMoney().doubleValue();
+        return BigDecimal.valueOf(interestRate).toBigInteger();
     }
 }

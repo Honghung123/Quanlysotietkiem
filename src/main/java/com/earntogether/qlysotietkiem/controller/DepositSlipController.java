@@ -20,8 +20,9 @@ public class DepositSlipController {
     private final DepositSlipService depositService;
 
     @GetMapping
-    public ResponseEntity<List<DepositSlipModel>> getAllDepositSlip(){
-        return ResponseEntity.ok(depositService.getAllDepositSlip());
+    @ResponseStatus(HttpStatus.OK)
+    public List<DepositSlipModel> getAllDepositSlip(){
+        return depositService.getAllDepositSlip();
     }
 
     @PostMapping
@@ -29,5 +30,11 @@ public class DepositSlipController {
     public String insertDepositSlip(@Valid DepositSlipDTO depositSlipDto){
         depositService.insertDepositSlip(depositSlipDto);
         return "{\"message\" : \"Gởi tiền thành công!\"}";
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAllDepositSlip(){
+        depositService.deleteAllDepositSlip();
     }
 }

@@ -13,6 +13,5 @@ public interface CustomerRepository extends MongoRepository<Customer,
     Optional<Customer> findByIdentityNumber(String identityNumber);
     Optional<Customer> deleteByCustomerCode(int customerCode);
     long count();
-    Optional<Customer> findByNameAndPassbookPassbookCode(String name,
-                                                         int passbookCode);
+    Optional<Customer> findByNameAndPassbookCode(String name, int passbookCode);
 }

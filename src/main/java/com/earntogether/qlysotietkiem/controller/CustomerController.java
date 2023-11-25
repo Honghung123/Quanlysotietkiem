@@ -43,24 +43,8 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{code}")
-    public void deleteCustomerByCustomerCode(@PathVariable int code){
+    public void deleteCustomer(@PathVariable int code){
         commonCusPassbookService.deleteCustomerByCustomerCode(code);
-    }
-
-    @GetMapping("/tracuu")
-    @ResponseStatus(HttpStatus.OK)
-    public List<PassbookModel> lookupPassbooks(){
-        return customerService.lookupPassbooks();
-    }
-
-    @GetMapping("/lookup")
-    @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> lookupPassbooks(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "per_page", defaultValue = "2") int per_page,
-            @RequestParam(name = "sortBy", defaultValue = "makh") String sortBy
-    ){
-        return customerService.lookupPassbooks(page, per_page, sortBy);
     }
 
 }

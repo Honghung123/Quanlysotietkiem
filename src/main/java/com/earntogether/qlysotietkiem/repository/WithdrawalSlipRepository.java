@@ -13,4 +13,6 @@ public interface WithdrawalSlipRepository extends MongoRepository<WithdrawalSlip
         String> {
     @Query("{'type' : ?0, 'withdrawalDate': ?1}")
     List<WithdrawalSlip> findByTypeAndWithdrawalDate(int type, LocalDate withdrawalDate);
+
+    void deleteAll();
 }

@@ -14,4 +14,5 @@ public interface DepositSlipRepository extends MongoRepository<DepositSlip,
     @Query(value = "{'type':?0, 'depositDate': ?1}")
     List<DepositSlip> findByTypeAndDepositDate(int type, LocalDate depositDate);
 
+    void deleteAll();
 }

@@ -1,6 +1,6 @@
 package com.earntogether.qlysotietkiem.exception;
 
-public interface CommonException {
+public interface CommonException{
     int getCode();
     String getMessage();
 }

@@ -20,14 +20,14 @@ public class Passbook {
     private String id;
     @Field(name = "passbookCode")
     private int passbookCode;
+    @Field(name = "customerCode")
+    private int customerCode;
     @Field(name = "status")
     private int status;
-    @Field(name = "type")
-    private int type;
+    @Field(name = "term")
+    private Term term;
     @Field(name = "dateCreated")
     private LocalDate dateCreated;
     @Field(name = "money")
     private BigInteger money;
-    @Field(name = "kyHan")
-    private Term term;
 }

@@ -3,6 +3,7 @@ package com.earntogether.qlysotietkiem.utils.converter;
 import com.earntogether.qlysotietkiem.dto.DepositSlipDTO;
 import com.earntogether.qlysotietkiem.entity.Customer;
 import com.earntogether.qlysotietkiem.entity.DepositSlip;
+import com.earntogether.qlysotietkiem.entity.Passbook;
 import com.earntogether.qlysotietkiem.model.DepositSlipModel;
 import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
 
@@ -19,11 +20,11 @@ public class DepositConverter {
     }
 
     public static DepositSlip convertDTOtoEntity(DepositSlipDTO depositDto,
-                                                 Customer customer) {
+                                                 Passbook passbook) {
         return DepositSlip.builder()
                 .passbookCode(depositDto.passbookCode())
-                .customerCode(customer.getCustomerCode())
-                .type(customer.getPassbook().getType())
+                .customerCode(passbook.getCustomerCode())
+                .type(passbook.getTerm().getType())
                 .depositDate(depositDto.depositDate())
                 .money(depositDto.money())
                 .build();

@@ -33,6 +33,4 @@ public class Term {
     private BigInteger minAdditionalDeposit;
     @Field(name = "daysWithdrawn")
     private int daysWithdrawn;
-    @Field(name = "minDepositTime")
-    private int minDepositTime;
 }

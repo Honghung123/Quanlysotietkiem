@@ -29,4 +29,10 @@ public class WithdrawalSlipController {
         String message = withdrawalService.insertWithdrawalSlip(withdrawalSlipDto);
         return String.format("{\"message\": \"%s\"}", message);
     }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAll(){
+        withdrawalService.deleteAllWithdrawalSlip();
+    }
 }

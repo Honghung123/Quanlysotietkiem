@@ -42,15 +42,15 @@
     <form action="http://localhost:8080/api/customer-passbook" method="POST">
         <legend>POST method</legend>
         <label for="">Mã số:</label>
-        <input type="text" name="customerCode" required>
+        <input type="text" name="passbookCode" required>
         <label for="name">Khách hàng: </label>
         <input type="text" name="name" required>
         <label for="maso">Địa chỉ:</label>
         <input type="text" name="address" required>
         <br>
-        <label for="money">Số tiền gửi</label>
-        <input type="range" name="money" min="100000" max="2000000" step="100000" id="moneyss" value="100000">
-        <span class="show-rangess"></span>
+        <label for="">Số tiền gửi</label>
+        <input type="range" name="money" min="100000" max="20000000" step="100000" id="money" value="100000">
+        <span class="show-range"></span>
         <br>
         <label for="takeout">Loại tiết kiệm: </label>
         <select name="type">
@@ -83,8 +83,7 @@
         <label for="takeout">Ngày gởi</label>
         <input type="date" name="depositDate" required>
         <label for="money">Số tiền gửi</label>
-        <input type="range" name="money" min="10000" max="2000000" step="10000" id="moneys" value="50000">
-        <span class="show-ranges"></span>
+        <input type="number" name="money" min="10000" max="20000000" value="50000">
         <button type="submit" class="btn btn-success">Gởi tiền</button>
     </form>
     <br>
@@ -101,16 +100,15 @@
         <br>
         <label for="takeout">Ngày rút</label>
         <input type="date" name="withdrawalDate" id="takeout" required>
-        <label for="money">Số tiền rút</label>
-        <input type="range" name="money" id="money" min="10000" max="2000000" step="10000" value="50000">
-        <span class="show-range"></span>
+        <label for="">Số tiền rút</label>
+        <input type="number" name="money" min="10000" max="20000000" value="50000">
         <button type="submit" class="btn btn-warning">Rút tiền</button>
     </form>
     <br>
     <hr>
     <h1>Danh sách sổ tiết kiệm</h1>
-    <a href="http://localhost:8080/api/customer-passbook/tracuu" class="showLink btn bg-pink">Hiển thị</a>
-    <a href="http://localhost:8080/api/customer-passbook/lookup?page=0&per_page=3" class="showLink btn bg-pink">
+    <a href="http://localhost:8080/api/passbook/tracuu" class="showLink btn bg-pink">Hiển thị</a>
+    <a href="http://localhost:8080/api/passbook/lookup?page=0&per_page=3" class="showLink btn bg-pink">
         Hiển thị có phân trang</a>
     <p>* page là trang hiện tại bắt đầu từ 0(mặc định là 0), per_page là số item trong mỗi page(mặc định là 2),
         total_pages là số page</p>
@@ -156,6 +154,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="http://localhost:8080/api/term" method="POST">
+                        <legend>POST Method</legend>
                         <label for="">Chọn loại kỳ hạn:</label>
                         <input type="number" name="monthsOfTerm" min="0" value="1" width="5%"> Tháng
                         <br>
@@ -175,20 +174,20 @@
     </div>
     <br>
     <p class="mt-4 text-danger fw-bold d-inline-block">Xóa kỳ hạn </p>
-    <label for="">Nhập type: </label>
+    <label for="">(DELETE Method using AJAX) Nhập type : </label>
     <input type="number" id="delete-termInput" required min="0" value="1">
     <button class="btn btn-danger" id="delete-termBtn">Delete</button>
     <hr><br>
     <h1>Cập nhật kỳ hạn: </h1>
     <form action="http://localhost:8080/api/term" method="" id="update-term">
+        <legend>PUT method using AJAX</legend>
         <label for="">Chọn loại kỳ hạn type = </label>
         <input type="number" name="type" value="3" min="0">
         <label for="">Số tiền gửi tối thiểu: </label>
         <input type="number" name="minDeposit" step="10000" min="10000" value="100000">
         <br>
-        <label for="">Thời gian gởi tối thiểu(đơn vị: tháng) :</label>
-        <input type="number" name="minDepositTime" min="0" value="0">
-        <span class="text-danger">*Chỉ áp dụng cho loại Không kỳ hạn(0 tháng), mặc định để 0</span>
+        <label for="">Thời gian gởi tối thiểu(đơn vị: ngày) :</label>
+        <input type="number" name="minDepositTime" min="1" value="15">
         <br>
         <label for="">Lãi suất: </label>
         <input type="number" min="0.0001" step="0.0001" value="0.0055" name="interestRate">
@@ -209,18 +208,6 @@
         $showRange.text($range.val())
         $range.on("input change", function (e) {
             $showRange.text(e.target.value);
-        })
-        const $ranges = $("input#moneys");
-        const $showRanges = $("span.show-ranges");
-        $showRanges.text($ranges.val())
-        $ranges.on("input change", function (e) {
-            $showRanges.text(e.target.value);
-        })
-        const $rangess = $("input#moneyss");
-        const $showRangess = $("span.show-rangess");
-        $showRangess.text($rangess.val())
-        $rangess.on("input change", function (e) {
-            $showRangess.text(e.target.value);
         })
         function deleteAjaxRequest(url, id) {
             const isConfirmed = confirm(`Are you sure you want to delete id: ${id}`);

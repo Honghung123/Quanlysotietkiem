@@ -19,12 +19,12 @@ public class Customer {
     private String id;
     @Field(name = "customerCode")
     private int customerCode;
-    @Field(name = "customerName")
+    @Field(name = "name")
     private String name;
     @Field(name = "address")
     private String address;
     @Field(name = "identityNumber")
     private String identityNumber;
-    @Field(name = "passbook")
-    private Passbook passbook;
+    @Field(name = "passbookCode")
+    private int passbookCode;
 }
