@@ -6,9 +6,9 @@ một file html rồi mở file html bằng live server của vscode cx được
 
 ## Trước khi clone project, Nếu Ai muốn thao tác database riêng thì thực hiện dưới đây, không thì gửi email đã đăng kí mongoDB để tui invite 
 # 🎉 NEW UPDATE - Giờ đây không cần làm gì nhiều 
-- Tạo collection ***tbl_customer_passbook***, ***tbl_depositSlip***, 
-  ***tbl_withdrawalSlip*** và ***tbl_passbook*** (Không cần chứa dữ liệu) 
-- Tạo collection ***tbl_kyhan*** rồi nhấn INSERT DOCUMENT rồi lần lượt thêm 3 
+- Tạo collection **tbl_customer_passbook**, **tbl_depositSlip**, 
+  **tbl_withdrawalSlip** và **tbl_passbook** (Không cần chứa dữ liệu) 
+- Tạo collection **tbl_term** rồi nhấn INSERT DOCUMENT rồi lần lượt thêm 3 
   cái này (**Thực ra không thêm cũng được, nhưng muốn đăng ký sổ tiết kiệm thì bắt buộc phải có kỳ hạn**)
 
 {"_id":{"$oid":"655b6d8fffe0b4786218ac18"},"type":{"$numberInt":"0"},"name":"Không kỳ hạn","monthsOfTerm":{"$numberInt":"0"},"interestRate":{"$numberDouble":"0.0015"},"minDeposit":"100000","minAdditionalDeposit":"100000","daysWithdrawn":{"$numberInt":"15"},"minDepositTime":{"$numberInt":"1"},"_class":"com.earntogether.qlysotietkiem.entity.Term"}
