@@ -55,14 +55,15 @@ public class CommonCustomerPassbookService {
     public void updateMoneyByPassbookCode( @Positive int code,
                                            @NotNull BigInteger money){
         var passbook = passbookRepository.findByPassbookCode(code)
-                .orElseThrow(() -> new ResourceNotFoundException(404, ""));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm " +
+                        "thấy passbook có mã: " + code));
         passbook.setMoney(money);
         System.out.println(passbook);
         passbookRepository.save(passbook);
     }
     public String getNameByCustomerCode(int code) {
         var customer = customerRepository.findByCustomerCode(code).orElseThrow(
-                () -> new ResourceNotFoundException(404, "Không tìm thấy " +
+                () -> new ResourceNotFoundException("Không tìm thấy " +
                         "khách hàng có mã: " + code));
         return customer.getName();
     }
@@ -70,7 +71,7 @@ public class CommonCustomerPassbookService {
     // PassbookService
     public void updatePassbookStatus(int code, int status){
         Passbook passbook = passbookRepository.findByPassbookCode(code)
-                .orElseThrow(() -> new ResourceNotFoundException(404,
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy sổ tiết kiệm có mã = " + code));
         passbook.setStatus(status);
         passbookRepository.save(passbook);

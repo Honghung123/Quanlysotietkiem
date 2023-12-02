@@ -46,5 +46,4 @@ public class CustomerController {
     public void deleteCustomer(@PathVariable int code){
         commonCusPassbookService.deleteCustomerByCustomerCode(code);
     }
-
 }

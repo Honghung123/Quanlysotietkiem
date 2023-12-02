@@ -30,12 +30,13 @@ public class DepositSlipService {
     public void insertDepositSlip(DepositSlipDTO depositSlipDto) {
         var customer = commonCusPassbookService.getCustomerByNameAndPassbookCode(
                 depositSlipDto.customerName(), depositSlipDto.passbookCode())
-                .orElseThrow( () -> new ResourceNotFoundException( 404,
+                .orElseThrow( () -> new ResourceNotFoundException(
                         "Không tồn tại khách hàng: " + depositSlipDto.customerName() +
                                 " có mã sổ: " + depositSlipDto.passbookCode()));
         // Kiểm tra loại tiết kiệm
         var passbook = passbookRepository.findByPassbookCode(customer.getPassbookCode())
-                .orElseThrow(() -> new ResourceNotFoundException(404, ""));
+                .orElseThrow(() -> new ResourceNotFoundException( "Không " +
+                        "tìm thấy passbook có mã: " + customer.getPassbookCode()));
         var term = passbook.getTerm();
         if(term.getType() != 0){
             throw new DataNotValidException("Chỉ chấp nhận gửi tiền " +
@@ -52,7 +53,7 @@ public class DepositSlipService {
 
         var moneyAdded = passbook.getMoney().add(depositSlipDto.money());
         commonCusPassbookService.updateMoneyByPassbookCode(
-                                    passbook.getCustomerCode(), moneyAdded);
+                                    passbook.getPassbookCode(), moneyAdded);
         var depositSlip = DepositConverter.convertDTOtoEntity(depositSlipDto,
                                                               passbook);
         depositSlipRepository.save(depositSlip);

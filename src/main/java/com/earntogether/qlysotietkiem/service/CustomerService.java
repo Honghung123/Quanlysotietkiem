@@ -41,7 +41,7 @@ public class CustomerService {
     public void insertCustomerPassbook(CustomerPassbookDTO cusPassbookDto){
         // Get term instance by type
         var term = termRepository.findByType(cusPassbookDto.type())
-                .orElseThrow(() -> new ResourceNotFoundException(404,
+                .orElseThrow(() -> new ResourceNotFoundException(
                     "Không tồn tại kỳ hạn chỉ định. Vui lòng tạo mới kỳ hạn"));
         // Check money sent if is lower than minimum deposit
         if(cusPassbookDto.money().compareTo(term.getMinDeposit()) < 0){

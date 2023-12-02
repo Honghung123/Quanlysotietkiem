@@ -31,11 +31,12 @@ public class WithdrawalSlipService {
     public String insertWithdrawalSlip(WithdrawalSlipDTO withdrawalSlipDto) {
         var customer = commonCusPassbookService.getCustomerByNameAndPassbookCode(
                 withdrawalSlipDto.customerName(), withdrawalSlipDto.passbookCode())
-                .orElseThrow(() -> new ResourceNotFoundException( 404,
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tồn tại khách hàng: " + withdrawalSlipDto.customerName()
                                 + " có mã sổ: " + withdrawalSlipDto.passbookCode()));
         var passbook = passbookRepository.findByPassbookCode(customer.getPassbookCode())
-                .orElseThrow(() -> new ResourceNotFoundException(404, ""));
+                .orElseThrow(() -> new ResourceNotFoundException( "Khong tim " +
+                        "thay passbook co ma: " + customer.getPassbookCode() ));
         var term = passbook.getTerm();
         // Kiểm tra thời gian mở sổ có đủ điều kiện được rút
         var currentDate = LocalDate.now();
