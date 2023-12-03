@@ -18,11 +18,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/passbook")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class PassbookController {
     private final PassbookService passbookService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Passbook> getAllFullPassbookDetails(){
         return passbookService.getAllPassbook();
     }
@@ -44,6 +46,7 @@ public class PassbookController {
     }
 
     @GetMapping("/report")
+    @ResponseStatus(HttpStatus.OK)
     public List<ReportModel> getOpenClosePassbookMonthlyReport(
             @Valid ReportDTO reportDto){
         return passbookService.getOpenClosePassbookMonthlyReport(reportDto);

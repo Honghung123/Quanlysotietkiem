@@ -2,12 +2,11 @@ package com.earntogether.qlysotietkiem.controller;
 
 import com.earntogether.qlysotietkiem.dto.DepositSlipDTO;
 import com.earntogether.qlysotietkiem.model.DepositSlipModel;
-import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
+import com.earntogether.qlysotietkiem.model.AppResponse;
 import com.earntogether.qlysotietkiem.service.DepositSlipService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +26,9 @@ public class DepositSlipController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public String insertDepositSlip(@Valid DepositSlipDTO depositSlipDto){
+    public AppResponse insertDepositSlip(@Valid DepositSlipDTO depositSlipDto){
         depositService.insertDepositSlip(depositSlipDto);
-        return "{\"message\" : \"Gởi tiền thành công!\"}";
+        return new AppResponse(HttpStatus.OK.value(),"Gởi tiền thành công!");
     }
 
     @DeleteMapping

@@ -1,7 +1,7 @@
 package com.earntogether.qlysotietkiem.controller;
 
 import com.earntogether.qlysotietkiem.dto.WithdrawalSlipDTO;
-import com.earntogether.qlysotietkiem.model.DepositSlipModel;
+import com.earntogether.qlysotietkiem.model.AppResponse;
 import com.earntogether.qlysotietkiem.model.WithdrawalSlipModel;
 import com.earntogether.qlysotietkiem.service.WithdrawalSlipService;
 import jakarta.validation.Valid;
@@ -25,9 +25,9 @@ public class WithdrawalSlipController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public String insertWithdrawalSlip(@Valid WithdrawalSlipDTO withdrawalSlipDto){
+    public AppResponse insertWithdrawalSlip(@Valid WithdrawalSlipDTO withdrawalSlipDto){
         String message = withdrawalService.insertWithdrawalSlip(withdrawalSlipDto);
-        return String.format("{\"message\": \"%s\"}", message);
+        return new AppResponse(HttpStatus.OK.value(), message);
     }
 
     @DeleteMapping

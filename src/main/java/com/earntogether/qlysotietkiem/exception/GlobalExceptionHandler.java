@@ -1,5 +1,6 @@
 package com.earntogether.qlysotietkiem.exception;
 
+import com.earntogether.qlysotietkiem.model.AppResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,34 +20,29 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler({ ResourceNotFoundException.class,
             DataNotValidException.class })
-    public ResponseEntity<String> handleCommonException(CommonException ex,
-                                                        WebRequest request){
+    public ResponseEntity<AppResponse> handleCommonException(CommonException ex,
+                                                             WebRequest request){
         System.out.println("Caught an exception! Bug ne ban oi hahaha");
-        String message = ex.getMessage();
         return ResponseEntity.status(ex.getCode()).body(
-                String.format("{\"message\":\"%s\"}", message)
-        );
+                new AppResponse(ex.getCode(), ex.getMessage()));
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<String> handle(BindException ex) {
+    public ResponseEntity<AppResponse> handle(BindException ex) {
         List<ObjectError> listErrors = ex.getBindingResult().getAllErrors();
         String message = listErrors.get(0).getDefaultMessage();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                String.format("{\"message\":\"%s\"}", message)
-        );
+                new AppResponse(HttpStatus.BAD_REQUEST.value(), message));
     }
 
     // Nên bắt cả Exception.class
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleUnwantedException(Exception e,
-                                                          WebRequest request) {
+    public ResponseEntity<AppResponse> handleUnwantedException(
+                                            Exception ex, WebRequest request) {
         // Log lỗi ra và ẩn đi message thực sự
-        e.printStackTrace();  // Thực tế người ta dùng logger
-        String message = e.getMessage();
+        ex.printStackTrace();  // Thực tế người ta dùng logger
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                        String.format("{\"message\":\"%s\"}", message)
-        );
+                       new AppResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
     }
 }
 

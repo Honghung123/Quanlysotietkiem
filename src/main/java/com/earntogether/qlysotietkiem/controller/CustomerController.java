@@ -2,17 +2,15 @@ package com.earntogether.qlysotietkiem.controller;
 
 import com.earntogether.qlysotietkiem.dto.CustomerPassbookDTO;
 import com.earntogether.qlysotietkiem.entity.Customer;
-import com.earntogether.qlysotietkiem.model.PassbookModel;
+import com.earntogether.qlysotietkiem.model.AppResponse;
 import com.earntogether.qlysotietkiem.service.CommonCustomerPassbookService;
 import com.earntogether.qlysotietkiem.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/customer-passbook")
@@ -36,13 +34,14 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String insertCustomer(@Valid CustomerPassbookDTO cusPassbookDto){
+    public AppResponse insertCustomer(@Valid CustomerPassbookDTO cusPassbookDto){
         customerService.insertCustomerPassbook(cusPassbookDto);
         String message = "Created successfully";
-        return String.format("{\"message\": \"%s\"}", message);
+        return new AppResponse(HttpStatus.CREATED.value(), message);
     }
 
     @DeleteMapping("/{code}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable int code){
         commonCusPassbookService.deleteCustomerByCustomerCode(code);
     }
